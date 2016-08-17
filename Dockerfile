@@ -36,7 +36,7 @@ RUN cd $HOME \
 
 # Default configuration: can be overridden at the docker command line
 ENV JAVA_OPTS -Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true
-ENV KEYCLOAK_STANDALONE configuration deployments
+ENV KEYCLOAK_STANDALONE configuration
 ENV KEYCLOAK_CHOWN $JBOSS_HOME/standalone
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
