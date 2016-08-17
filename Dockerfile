@@ -31,10 +31,13 @@ RUN cd $HOME \
     && mv $HOME/keycloak-$KEYCLOAK_VERSION $JBOSS_HOME \
     && $JBOSS_HOME/bin/add-user.sh $ADMIN_USER $ADMIN_PASSWORD --silent \
     && $JBOSS_HOME/bin/add-user-keycloak.sh -r master -u $KEYCLOAK_ADMIN_USER -p $KEYCLOAK_ADMIN_PASSWORD \
-    && chown -R keycloak $JBOSS_HOME
+    && mkdir /docker-entrypoint.d  && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
+    && chown keycloak $JBOSS_HOME
 
 # Default configuration: can be overridden at the docker command line
 ENV JAVA_OPTS -Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true
+ENV KEYCLOAK_STANDALONE configuration deployments
+ENV KEYCLOAK_CHOWN $JBOSS_HOME/standalone
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
 ENV LAUNCH_JBOSS_IN_BACKGROUND true
