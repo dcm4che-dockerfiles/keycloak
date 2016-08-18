@@ -20,7 +20,7 @@ RUN arch="$(dpkg --print-architecture)" \
     && gosu nobody true
 
 ENV KEYCLOAK_VERSION=2.1.0.Final \
-    LOGSTASH_GELF_VERSION=1.8.0 \
+    LOGSTASH_GELF_VERSION=1.10.0 \
     DCM4CHE_VERSION=dcm4chee-arc-light-5.6.0 \
     JBOSS_HOME=/opt/keycloak
 
@@ -47,9 +47,11 @@ ENV WILDFLY_ADMIN_USER=admin \
     KEYCLOAK_ADMIN_PASSWORD=admin \
     LDAP_HOST=ldap \
     LDAP_PORT=389 \
-    LDAP_BASE_DN="dc=dcm4che,dc=org" \
-    LDAP_ROOTPASS="secret" \
-    DEVICE_NAME="keycloak" \
+    LDAP_BASE_DN=dc=dcm4che,dc=org \
+    LDAP_ROOTPASS=secret \
+    DEVICE_NAME=keycloak \
+    LOGSTASH=logstash \
+    GELF_FACILITY=keycloak \
     JAVA_OPTS="-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
