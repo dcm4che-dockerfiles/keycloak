@@ -3,22 +3,14 @@
 set -e
 
 if [ "$1" = 'standalone.sh' ]; then
-	for f in $KEYCLOAK_STANDALONE; do
-		if [ ! -d $JBOSS_HOME/standalone/$f ]; then
-			echo "cp -r /docker-entrypoint.d/$f $JBOSS_HOME/standalone"
-			cp -r /docker-entrypoint.d/$f $JBOSS_HOME/standalone
-			chown -R keycloak:keycloak $JBOSS_HOME/standalone/$f
-		fi
-	done
-	if [ ! -f $JBOSS_HOME/standalone/chown.done ]; then
-		touch $JBOSS_HOME/standalone/chown.done
-		for f in $KEYCLOAK_CHOWN; do
-			echo "chown -R keycloak:keycloak $f"
-			chown -R keycloak:keycloak $f
-		done
-	fi
-	set -- gosu keycloak "$@"
-	echo "Starting Keycloak $KEYCLOAK_VERSION"
+    if [ ! -d $JBOSS_HOME/standalone/configuration ]; then
+        cp -r /docker-entrypoint.d/configuration $JBOSS_HOME/standalone
+        $JBOSS_HOME/bin/add-user.sh $WILDFLY_ADMIN_USER $WILDFLY_ADMIN_PASSWORD --silent
+        $JBOSS_HOME/bin/add-user-keycloak.sh -r master -u $KEYCLOAK_ADMIN_USER -p $KEYCLOAK_ADMIN_PASSWORD
+        chown -R keycloak:keycloak $JBOSS_HOME/standalone
+    fi
+    set -- gosu keycloak "$@"
+    echo "Starting Keycloak $KEYCLOAK_VERSION"
 fi
 
 exec "$@"

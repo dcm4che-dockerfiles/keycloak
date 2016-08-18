@@ -20,24 +20,37 @@ RUN arch="$(dpkg --print-architecture)" \
     && gosu nobody true
 
 ENV KEYCLOAK_VERSION=2.1.0.Final \
-    JBOSS_HOME=/opt/keycloak \
-    ADMIN_USER=admin \
-    ADMIN_PASSWORD=admin \
-    KEYCLOAK_ADMIN_USER=admin \
-    KEYCLOAK_ADMIN_PASSWORD=admin
+    LOGSTASH_GELF_VERSION=1.8.0 \
+    DCM4CHE_VERSION=dcm4chee-arc-light-5.6.0 \
+    JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
     && curl -L https://downloads.jboss.org/keycloak/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz | tar xz \
     && mv $HOME/keycloak-$KEYCLOAK_VERSION $JBOSS_HOME \
-    && $JBOSS_HOME/bin/add-user.sh $ADMIN_USER $ADMIN_PASSWORD --silent \
-    && $JBOSS_HOME/bin/add-user-keycloak.sh -r master -u $KEYCLOAK_ADMIN_USER -p $KEYCLOAK_ADMIN_PASSWORD \
-    && mkdir /docker-entrypoint.d  && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
-    && chown keycloak $JBOSS_HOME
+    && curl http://central.maven.org/maven2/biz/paluch/logging/logstash-gelf/$LOGSTASH_GELF_VERSION/logstash-gelf-$LOGSTASH_GELF_VERSION-logging-module.zip -O \
+    && unzip logstash-gelf-$LOGSTASH_GELF_VERSION-logging-module.zip \
+    && mv $HOME/logstash-gelf-$LOGSTASH_GELF_VERSION/biz $JBOSS_HOME/modules/biz \
+    && rmdir $HOME/logstash-gelf-$LOGSTASH_GELF_VERSION \
+    && rm logstash-gelf-$LOGSTASH_GELF_VERSION-logging-module.zip \
+    && mkdir /docker-entrypoint.d \
+    && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
+    && cd $JBOSS_HOME \
+    && curl http://www.dcm4che.org/maven2/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}.tar.gz | tar xz \
+    && chown -R keycloak:keycloak $JBOSS_HOME
+
+COPY configuration /docker-entrypoint.d/configuration
 
 # Default configuration: can be overridden at the docker command line
-ENV JAVA_OPTS -Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true
-ENV KEYCLOAK_STANDALONE configuration
-ENV KEYCLOAK_CHOWN $JBOSS_HOME/standalone
+ENV WILDFLY_ADMIN_USER=admin \
+    WILDFLY_ADMIN_PASSWORD=admin \
+    KEYCLOAK_ADMIN_USER=admin \
+    KEYCLOAK_ADMIN_PASSWORD=admin \
+    LDAP_HOST=ldap \
+    LDAP_PORT=389 \
+    LDAP_BASE_DN="dc=dcm4che,dc=org" \
+    LDAP_ROOTPASS="secret" \
+    DEVICE_NAME="keycloak" \
+    JAVA_OPTS="-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
 ENV LAUNCH_JBOSS_IN_BACKGROUND true
@@ -52,4 +65,4 @@ EXPOSE 8080 9990
 COPY docker-entrypoint.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+CMD ["standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-Dkeycloak.import=/opt/keycloak/standalone/configuration/dcm4che-realm.json"]
