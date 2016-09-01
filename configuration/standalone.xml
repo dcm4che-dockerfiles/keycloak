@@ -78,12 +78,6 @@
     </management>
     <profile>
         <subsystem xmlns="urn:jboss:domain:logging:3.0">
-            <console-handler name="CONSOLE">
-                <level name="INFO"/>
-                <formatter>
-                    <named-formatter name="COLOR-PATTERN"/>
-                </formatter>
-            </console-handler>
             <periodic-rotating-file-handler name="FILE" autoflush="true">
                 <formatter>
                     <named-formatter name="PATTERN"/>
@@ -104,7 +98,6 @@
             <root-logger>
                 <level name="INFO"/>
                 <handlers>
-                    <handler name="CONSOLE"/>
                     <handler name="FILE"/>
                 </handlers>
             </root-logger>
