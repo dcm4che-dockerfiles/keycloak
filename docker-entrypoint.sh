@@ -9,6 +9,11 @@ if [ "$1" = 'standalone.sh' ]; then
         $JBOSS_HOME/bin/add-user-keycloak.sh -r master -u $KEYCLOAK_ADMIN_USER -p $KEYCLOAK_ADMIN_PASSWORD
         chown -R keycloak:keycloak $JBOSS_HOME/standalone
     fi
+    for c in $KEYCLOAK_WAIT_FOR; do
+        echo -n "Waiting for $c ... "
+        while ! nc -w 1 -z ${c/:/ }; do sleep 0.1; done
+        echo "done"
+    done
     set -- gosu keycloak "$@"
     echo "Starting Keycloak $KEYCLOAK_VERSION"
 fi

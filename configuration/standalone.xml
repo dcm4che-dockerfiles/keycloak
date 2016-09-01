@@ -25,7 +25,7 @@
         <extension module="org.wildfly.extension.undertow"/>
     </extensions>
     <system-properties>
-        <property name="dcm4chee-arc.DeviceName" value="${env.DEVICE_NAME}"/>
+        <property name="dcm4chee-arc.DeviceName" value="${env.KEYCLOAK_DEVICE_NAME}"/>
     </system-properties>
     <management>
         <security-realms>
