@@ -4,6 +4,7 @@
     <extensions>
         <extension module="org.jboss.as.clustering.infinispan"/>
         <extension module="org.jboss.as.connector"/>
+        <extension module="org.jboss.as.deployment-scanner"/>
         <extension module="org.jboss.as.ee"/>
         <extension module="org.jboss.as.ejb3"/>
         <extension module="org.jboss.as.jaxrs"/>
@@ -107,6 +108,9 @@
             <formatter name="COLOR-PATTERN">
                 <pattern-formatter pattern="%K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n"/>
             </formatter>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:deployment-scanner:2.0">
+            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false}"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:bean-validation:1.0"/>
         <subsystem xmlns="urn:jboss:domain:datasources:4.0">
@@ -369,6 +373,74 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:keycloak-server:1.1">
             <web-context>auth</web-context>
+            <providers>
+                <provider>classpath:${jboss.home.dir}/providers/*</provider>
+            </providers>
+            <master-realm-name>master</master-realm-name>
+            <scheduled-task-interval>900</scheduled-task-interval>
+            <theme>
+                <staticMaxAge>2592000</staticMaxAge>
+                <cacheThemes>true</cacheThemes>
+                <cacheTemplates>true</cacheTemplates>
+                <dir>${jboss.home.dir}/themes</dir>
+            </theme>
+            <spi name="eventsStore">
+                <default-provider>jpa</default-provider>
+                <provider name="jpa" enabled="true">
+                    <properties>
+                        <property name="exclude-events" value="[&quot;REFRESH_TOKEN&quot;]"/>
+                    </properties>
+                </provider>
+            </spi>
+            <spi name="realm">
+                <default-provider>jpa</default-provider>
+            </spi>
+            <spi name="user">
+                <default-provider>jpa</default-provider>
+            </spi>
+            <spi name="userFederatedStorage">
+                <default-provider>jpa</default-provider>
+            </spi>
+            <spi name="userCache">
+                <provider name="default" enabled="true"/>
+            </spi>
+            <spi name="userSessionPersister">
+                <default-provider>jpa</default-provider>
+            </spi>
+            <spi name="authorizationPersister">
+                <default-provider>jpa</default-provider>
+            </spi>
+            <spi name="timer">
+                <default-provider>basic</default-provider>
+            </spi>
+            <spi name="connectionsHttpClient">
+                <provider name="default" enabled="true"/>
+            </spi>
+            <spi name="connectionsJpa">
+                <provider name="default" enabled="true">
+                    <properties>
+                        <property name="dataSource" value="java:jboss/datasources/KeycloakDS"/>
+                        <property name="initializeEmpty" value="true"/>
+                        <property name="migrationStrategy" value="update"/>
+                        <property name="migrationExport" value="${jboss.home.dir}/keycloak-database-update.sql"/>
+                    </properties>
+                </provider>
+            </spi>
+            <spi name="realmCache">
+                <provider name="default" enabled="true"/>
+            </spi>
+            <spi name="connectionsInfinispan">
+                <default-provider>default</default-provider>
+                <provider name="default" enabled="true">
+                    <properties>
+                        <property name="cacheContainer" value="java:comp/env/infinispan/Keycloak"/>
+                    </properties>
+                </provider>
+            </spi>
+            <spi name="jta-lookup">
+                <default-provider>${keycloak.jta.lookup.provider:jboss}</default-provider>
+                <provider name="jboss" enabled="true"/>
+            </spi>
         </subsystem>
     </profile>
     <interfaces>
