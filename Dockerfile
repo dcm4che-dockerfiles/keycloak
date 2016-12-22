@@ -19,9 +19,9 @@ RUN arch="$(dpkg --print-architecture)" \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=2.2.1.Final \
+ENV KEYCLOAK_VERSION=2.4.0.Final \
     LOGSTASH_GELF_VERSION=1.10.0 \
-    DCM4CHE_VERSION=dcm4chee-arc-light-5.7.0 \
+    DCM4CHE_VERSION=dcm4chee-arc-light-5.8.0 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
@@ -41,10 +41,10 @@ RUN cd $HOME \
 COPY configuration /docker-entrypoint.d/configuration
 
 # Default configuration: can be overridden at the docker command line
-ENV WILDFLY_ADMIN_USER=admin \
-    WILDFLY_ADMIN_PASSWORD=admin \
-    KEYCLOAK_ADMIN_USER=admin \
-    KEYCLOAK_ADMIN_PASSWORD=admin \
+ENV WILDFLY_ADMIN_USER= \
+    WILDFLY_ADMIN_PASSWORD= \
+    KEYCLOAK_ADMIN_USER= \
+    KEYCLOAK_ADMIN_PASSWORD= \
     LDAP_HOST=ldap \
     LDAP_PORT=389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
@@ -65,4 +65,6 @@ EXPOSE 8080 9990
 COPY docker-entrypoint.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-Dkeycloak.import=/opt/keycloak/standalone/configuration/dcm4che-realm.json"]
+CMD ["standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", \
+     "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=singleFile", \
+     "-Dkeycloak.migration.file=/opt/keycloak/standalone/configuration/dcm4che-realm.json" ]

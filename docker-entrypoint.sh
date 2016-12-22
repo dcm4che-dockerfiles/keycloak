@@ -9,8 +9,12 @@ if [ "$1" = 'standalone.sh' ]; then
             -e "s%ldap://ldap:389%ldap://${LDAP_HOST}:${LDAP_PORT}%" \
             -e "s%\"bindCredential\" : \"secret\"%\"bindCredential\" : \"${LDAP_ROOTPASS}\"%" \
             -i $JBOSS_HOME/standalone/configuration/dcm4che-realm.json
-        $JBOSS_HOME/bin/add-user.sh $WILDFLY_ADMIN_USER $WILDFLY_ADMIN_PASSWORD --silent
-        $JBOSS_HOME/bin/add-user-keycloak.sh -r master -u $KEYCLOAK_ADMIN_USER -p $KEYCLOAK_ADMIN_PASSWORD
+        if [ -n "$WILDFLY_ADMIN_USER" -a -n "$WILDFLY_ADMIN_PASSWORD" ]; then
+            $JBOSS_HOME/bin/add-user.sh $WILDFLY_ADMIN_USER $WILDFLY_ADMIN_PASSWORD --silent
+        fi
+        if [ -n "$KEYCLOAK_ADMIN_USER" -a -n "$KEYCLOAK_ADMIN_PASSWORD" ]; then
+            $JBOSS_HOME/bin/add-user-keycloak.sh -r master -u $KEYCLOAK_ADMIN_USER -p $KEYCLOAK_ADMIN_PASSWORD
+        fi
         chown -R keycloak:keycloak $JBOSS_HOME/standalone
     fi
     for c in $KEYCLOAK_WAIT_FOR; do
