@@ -19,18 +19,18 @@ RUN arch="$(dpkg --print-architecture)" \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=2.4.0.Final \
-    LOGSTASH_GELF_VERSION=1.10.0 \
-    DCM4CHE_VERSION=dcm4chee-arc-light-5.8.0 \
+ENV KEYCLOAK_VERSION=3.2.1.Final \
+    LOGSTASH_GELF_VERSION=1.11.1 \
+    DCM4CHE_VERSION=5.10.5 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
     && curl -L https://downloads.jboss.org/keycloak/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz | tar xz \
-    && mv $HOME/keycloak-$KEYCLOAK_VERSION $JBOSS_HOME \
+    && mv keycloak-$KEYCLOAK_VERSION $JBOSS_HOME \
     && curl http://central.maven.org/maven2/biz/paluch/logging/logstash-gelf/$LOGSTASH_GELF_VERSION/logstash-gelf-$LOGSTASH_GELF_VERSION-logging-module.zip -O \
     && unzip logstash-gelf-$LOGSTASH_GELF_VERSION-logging-module.zip \
-    && mv $HOME/logstash-gelf-$LOGSTASH_GELF_VERSION/biz $JBOSS_HOME/modules/biz \
-    && rmdir $HOME/logstash-gelf-$LOGSTASH_GELF_VERSION \
+    && mv logstash-gelf-$LOGSTASH_GELF_VERSION/biz $JBOSS_HOME/modules/biz \
+    && rmdir logstash-gelf-$LOGSTASH_GELF_VERSION \
     && rm logstash-gelf-$LOGSTASH_GELF_VERSION-logging-module.zip \
     && mkdir /docker-entrypoint.d \
     && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
@@ -40,16 +40,33 @@ RUN cd $HOME \
 
 COPY configuration /docker-entrypoint.d/configuration
 
+COPY themes $JBOSS_HOME/themes
+
 # Default configuration: can be overridden at the docker command line
-ENV WILDFLY_ADMIN_USER= \
+ENV WILDFLY_ADMIN_USER=admin \
     WILDFLY_ADMIN_PASSWORD= \
     KEYCLOAK_ADMIN_USER= \
     KEYCLOAK_ADMIN_PASSWORD= \
+    KEYCLOAK_REALM=dcm4che \
+    KEYCLOAK_SSL_REQUIRED=external \
+    KEYCLOAK_KEYSTORE=keycloak/key.jks \
+    KEYCLOAK_KEYSTORE_PASSWORD=secret \
+    KEYCLOAK_KEYSTORE_TYPE=JKS \
+    KEYCLOAK_TRUSTSTORE=keycloak/cacerts.jks \
+    KEYCLOAK_TRUSTSTORE_PASSWORD=secret \
+    KEYCLOAK_TRUSTSTORE_HOSTNAME_VERIFICATION_POLICY=ANY \
+    KEYCLOAK_DEVICE_NAME=keycloak \
     LDAP_HOST=ldap \
     LDAP_PORT=389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
     LDAP_ROOTPASS=secret \
-    KEYCLOAK_DEVICE_NAME=keycloak \
+    SYSLOG_HOST=logstash \
+    GELF_FACILITY=keycloak \
+    GELF_LEVEL=WARN \
+    SYSLOG_HOST=logstash \
+    HTTP_PORT=8080 \
+    HTTPS_PORT=8443 \
+    MANAGEMENT_HTTP_PORT=9990 \
     JAVA_OPTS="-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
@@ -65,6 +82,7 @@ EXPOSE 8080 9990
 COPY docker-entrypoint.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", \
+CMD ["standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-c", "keycloak.xml", \
      "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=singleFile", \
-     "-Dkeycloak.migration.file=/opt/keycloak/standalone/configuration/dcm4che-realm.json" ]
+     "-Dkeycloak.migration.file=/opt/keycloak/standalone/configuration/dcm4che-realm.json", \
+     "-Dkeycloak.migration.strategy=IGNORE_EXISTING" ]
