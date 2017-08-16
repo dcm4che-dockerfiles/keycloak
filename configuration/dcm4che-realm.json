@@ -1,6 +1,6 @@
 {
-  "id" : "${env.KEYCLOAK_REALM}",
-  "realm" : "${env.KEYCLOAK_REALM}",
+  "id" : "${env.REALM_NAME}",
+  "realm" : "${env.REALM_NAME}",
   "notBefore" : 0,
   "revokeRefreshToken" : false,
   "accessTokenLifespan" : 300,
@@ -14,7 +14,7 @@
   "actionTokenGeneratedByAdminLifespan" : 43200,
   "actionTokenGeneratedByUserLifespan" : 300,
   "enabled" : true,
-  "sslRequired" : "${env.KEYCLOAK_SSL_REQUIRED}",
+  "sslRequired" : "${env.SSL_REQUIRED}",
   "registrationAllowed" : false,
   "registrationEmailAsUsername" : false,
   "rememberMe" : false,
@@ -39,7 +39,7 @@
       "scopeParamRequired" : false,
       "composite" : false,
       "clientRole" : false,
-      "containerId" : "${env.KEYCLOAK_REALM}"
+      "containerId" : "${env.REALM_NAME}"
     }, {
       "id" : "e6cb5433-6a19-4753-b767-3f0d3adab4d2",
       "name" : "offline_access",
@@ -47,7 +47,7 @@
       "scopeParamRequired" : true,
       "composite" : false,
       "clientRole" : false,
-      "containerId" : "${env.KEYCLOAK_REALM}"
+      "containerId" : "${env.REALM_NAME}"
     } ],
     "client" : {
       "realm-management" : [ {
@@ -274,13 +274,13 @@
     "id" : "0f30ae7e-b49e-4e05-8018-3997b1cac68c",
     "clientId" : "account",
     "name" : "${client_account}",
-    "baseUrl" : "/auth/realms/${env.KEYCLOAK_REALM}/account",
+    "baseUrl" : "/auth/realms/${env.REALM_NAME}/account",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "clientAuthenticatorType" : "client-secret",
     "secret" : "d79b1d0f-b8e7-440e-89d0-c2bf248bcca1",
     "defaultRoles" : [ "view-profile", "manage-account" ],
-    "redirectUris" : [ "/auth/realms/${env.KEYCLOAK_REALM}/account/*" ],
+    "redirectUris" : [ "/auth/realms/${env.REALM_NAME}/account/*" ],
     "webOrigins" : [ ],
     "notBefore" : 0,
     "bearerOnly" : false,
@@ -712,12 +712,12 @@
     "id" : "856fde24-60b9-45d0-a9d5-e8068b85db97",
     "clientId" : "security-admin-console",
     "name" : "${client_security-admin-console}",
-    "baseUrl" : "/auth/admin/${env.KEYCLOAK_REALM}/console/index.html",
+    "baseUrl" : "/auth/admin/${env.REALM_NAME}/console/index.html",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "clientAuthenticatorType" : "client-secret",
     "secret" : "980bc0c0-073a-4e8a-a17d-df8a119e0ce4",
-    "redirectUris" : [ "/auth/admin/${env.KEYCLOAK_REALM}/console/*" ],
+    "redirectUris" : [ "/auth/admin/${env.REALM_NAME}/console/*" ],
     "webOrigins" : [ ],
     "notBefore" : 0,
     "bearerOnly" : false,

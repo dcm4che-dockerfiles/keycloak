@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version='1.0' encoding='UTF-8'?>
 
 <server xmlns="urn:jboss:domain:4.0">
     <extensions>
@@ -57,7 +57,7 @@
             <security-realm name="UndertowRealm">
                 <server-identities>
                     <ssl>
-                        <keystore path="${env.KEYCLOAK_KEYSTORE}" relative-to="jboss.server.config.dir" keystore-password="${env.KEYCLOAK_KEYSTORE_PASSWORD}" provider="${env.KEYCLOAK_KEYSTORE_TYPE}"/>
+                        <keystore path="${env.KEYSTORE}" relative-to="jboss.server.config.dir" keystore-password="${env.KEYSTORE_PASSWORD}" key-password="${env.KEY_PASSWORD}" provider="${env.KEYSTORE_TYPE}"/>
                     </ssl>
                 </server-identities>
             </security-realm>
@@ -470,9 +470,9 @@
             <spi name="truststore">
                 <provider name="file" enabled="true">
                     <properties>
-                        <property name="file" value="${jboss.server.config.dir}/${env.KEYCLOAK_TRUSTSTORE}"/>
-                        <property name="password" value="${env.KEYCLOAK_TRUSTSTORE_PASSWORD}"/>
-                        <property name="hostname-verification-policy" value="${env.KEYCLOAK_TRUSTSTORE_HOSTNAME_VERIFICATION_POLICY}"/>
+                        <property name="file" value="${jboss.server.config.dir}/${env.TRUSTSTORE}"/>
+                        <property name="password" value="${env.TRUSTSTORE_PASSWORD}"/>
+                        <property name="hostname-verification-policy" value="${env.HOSTNAME_VERIFICATION_POLICY}"/>
                         <property name="disabled" value="false"/>
                     </properties>
                 </provider>

@@ -11,15 +11,15 @@ services:
       - /var/local/dcm4chee-arc/ldap:/var/lib/ldap
       - /var/local/dcm4chee-arc/slapd.d:/etc/ldap/slapd.d
   keycloak:
-    image: dcm4che/keycloak:3.2.1
+    image: dcm4che/keycloak:3.2.1-1
     ports:
       - "8880:8880"
-      - "8883:8883"
+      - "8843:8843"
       - "8990:8990"
     env_file: docker-compose.env
     environment:
       HTTP_PORT: 8880
-      HTTPS_PORT: 8883
+      HTTPS_PORT: 8843
       MANAGEMENT_HTTP_PORT: 8990
       KEYCLOAK_WAIT_FOR: ldap:389
     links:

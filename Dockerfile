@@ -43,30 +43,27 @@ COPY configuration /docker-entrypoint.d/configuration
 COPY themes $JBOSS_HOME/themes
 
 # Default configuration: can be overridden at the docker command line
-ENV WILDFLY_ADMIN_USER=admin \
-    WILDFLY_ADMIN_PASSWORD= \
-    KEYCLOAK_ADMIN_USER= \
-    KEYCLOAK_ADMIN_PASSWORD= \
-    KEYCLOAK_REALM=dcm4che \
-    KEYCLOAK_SSL_REQUIRED=external \
-    KEYCLOAK_KEYSTORE=keycloak/key.jks \
-    KEYCLOAK_KEYSTORE_PASSWORD=secret \
-    KEYCLOAK_KEYSTORE_TYPE=JKS \
-    KEYCLOAK_TRUSTSTORE=keycloak/cacerts.jks \
-    KEYCLOAK_TRUSTSTORE_PASSWORD=secret \
-    KEYCLOAK_TRUSTSTORE_HOSTNAME_VERIFICATION_POLICY=ANY \
-    KEYCLOAK_DEVICE_NAME=keycloak \
-    LDAP_HOST=ldap \
+ENV LDAP_HOST=ldap \
     LDAP_PORT=389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
     LDAP_ROOTPASS=secret \
-    SYSLOG_HOST=logstash \
-    GELF_FACILITY=keycloak \
-    GELF_LEVEL=WARN \
-    SYSLOG_HOST=logstash \
+    KEYCLOAK_DEVICE_NAME=keycloak \
     HTTP_PORT=8080 \
     HTTPS_PORT=8443 \
     MANAGEMENT_HTTP_PORT=9990 \
+    WILDFLY_ADMIN_USER=admin \
+    WILDFLY_ADMIN_PASSWORD= \
+    KEYCLOAK_ADMIN_USER= \
+    KEYCLOAK_ADMIN_PASSWORD= \
+    KEYSTORE=keycloak/key.jks \
+    KEYSTORE_PASSWORD=secret \
+    KEY_PASSWORD=secret \
+    KEYSTORE_TYPE=JKS \
+    TRUSTSTORE=keycloak/cacerts.jks \
+    TRUSTSTORE_PASSWORD=secret \
+    SSL_REQUIRED=external \
+    REALM_NAME=dcm4che \
+    HOSTNAME_VERIFICATION_POLICY=ANY \
     JAVA_OPTS="-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
@@ -75,9 +72,6 @@ ENV LAUNCH_JBOSS_IN_BACKGROUND true
 ENV PATH $JBOSS_HOME/bin:$PATH
 
 VOLUME /opt/keycloak/standalone
-
-# Expose the ports we're interested in
-EXPOSE 8080 9990
 
 COPY docker-entrypoint.sh /
 
