@@ -64,6 +64,9 @@ ENV LDAP_HOST=ldap \
     SSL_REQUIRED=external \
     REALM_NAME=dcm4che \
     HOSTNAME_VERIFICATION_POLICY=ANY \
+    SYSLOG_HOST=logstash \
+    GELF_FACILITY=keycloak \
+    GELF_LEVEL=WARN \
     JAVA_OPTS="-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
