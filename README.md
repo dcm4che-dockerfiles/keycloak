@@ -1,8 +1,8 @@
-### Keycloak Docker image
+# Keycloak Docker image
 
 This is a Dockerfile for standalone Keycloak server which could be used for securing the DICOM Archive [dcm4chee-arc-light](https://github.com/dcm4che/dcm4chee-arc-light/wiki).
 
-#### How to use this image
+## How to use this image
 
 Before running the Keycloak container, you have to start a container providing the [LDAP server](https://github.com/dcm4che-dockerfiles/slapd-dcm4chee#how-to-use-this-image).
 
@@ -60,7 +60,7 @@ with the _Logstash_ (alias:`logstash`) container:
            -d dcm4che/keycloak:3.2.1-1-logstash
 ```
 
-#### Environment Variables 
+## Environment Variables 
 
 Below explained environment variables can be set as per one's application to override the default values if need be.
 An example of how one can set an env variable in `docker run` command is shown below :
@@ -70,32 +70,99 @@ An example of how one can set an env variable in `docker run` command is shown b
 _**Note**_ : If default values of any environment variables were overridden in startup of `slapd` container, 
 then ensure that the same values are also used for overriding the defaults during startup of keycloak container. 
 
-##### `LDAP_BASE_DN`
+#### `LDAP_HOST`
 
-This environment variable sets the base domain name for LDAP. Default value is _**dc=dcm4che,dc=org**_.
+This environment variable sets the host name for LDAP. Default value is `ldap`.
 
-##### `LDAP_ROOTPASS`
+#### `LDAP_PORT`
 
-This environment variable sets the root password for LDAP. Default value is _**secret**_. 
+This environment variable sets the port for LDAP. Default value is `389`.
 
-##### `LDAP_CONFIGPASS`
+#### `LDAP_BASE_DN`
+
+This environment variable sets the base domain name for LDAP. Default value is `dc=dcm4che,dc=org`.
+
+#### `LDAP_ROOTPASS`
+
+This environment variable sets the root password for LDAP. Default value is `secret`. 
+
+#### `LDAP_CONFIGPASS`
 
 This environment variable sets the password for users who wish to change the schema configuration in LDAP. 
-Default value is _**secret**_. 
+Default value is `secret`. 
 
-##### `KEYCLOAK_DEVICE_NAME`
+#### `KEYCLOAK_DEVICE_NAME`
 
-This is the name of _**keycloak**_ device that is configured in LDAP. Default value is _**keycloak**_
+This is the name of `keycloak` device that is configured in LDAP. Default value is `keycloak`
 
-##### `AUTH_SERVER_URL`
+#### `REALM_NAME`
 
-This environment variable is used to match auth-server-url used in the wildfly configuration for Keycloak. Default value is /auth.
+This is the name of the realm configured in Keycloak for securing archive UI and RESTful services. Default value is `dcm4che`. 
 
-##### `REALM_NAME`
+#### `SSL_REQUIRED`
 
-This is the name of the realm configured in Keycloak for securing archive UI and RESTful services. Default value is _**dcm4che**_. 
+This environment variable defines the SSL/HTTPS requirements for interacting with the realm. Default value is `external`.
 
-#### Use Docker Compose
+#### `HOSTNAME_VERIFICATION_POLICY`
+
+This environment variable sets the verification policy for the hostname to be validated/authenticated. Default value set is `ANY`.
+Values which are accepted are : `ANY`, `WILDCARD` or `STRICT`.
+
+#### `SYSLOG_HOST`
+
+This environment variable is the host name of logstash container used in wildfly configuration. Default value is `logstash`.
+
+#### `GELF_FACILITY`
+
+This environment variable sets the facility name needed by GELF logging used in wildfly configuration. Default value is `dcm4chee-arc`.
+
+#### `GELF_LEVEL`
+
+This environment variable sets the level of GELF logging used in wildfly configuration. Default value is `WARN`.
+
+#### `JAVA_OPTS`
+
+This environment variable is used to set the JAVA_OPTS during archive startup. Default value is 
+`"-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"`
+
+#### `KEYSTORE`
+
+This environment variable sets the keystore used in ssl server identities in Wildfly configuration. Default value is `dcm4chee-arc/key.jks`.
+
+#### `KEYSTORE_PASSWORD`
+
+This environment variables sets the password of the keystore used in ssl server identities in Wildfly configuration. Default value is `secret`.
+
+#### `KEY_PASSWORD`
+
+This environment variables sets the password of the key used in ssl server identities in Wildfly configuration. Default value is `secret`.
+
+#### `KEYSTORE_TYPE`
+
+This environment variable sets the type of keystore that is used above. Default value is `JKS`.
+
+#### `WILDFLY_ADMIN_USER`
+
+This environment variable sets the admin user name for Wildfly. Default value is `admin`.
+
+#### `WILDFLY_ADMIN_PASSWORD`
+
+This environment variable sets the admin user name for Wildfly. Default value can be viewed in LDAP, it is set to `admin`.
+
+#### `HTTP_PORT`
+
+This environment variable sets the Http port of Wildfly. Default value is `8880`.
+
+#### `HTTPS_PORT`
+
+This environment variable sets the Https port of Wildfly. Default value is `8843`.
+
+#### `MANAGEMENT_HTTP_PORT`
+
+This environment variable sets the Management Http port of Wildfly. Default value is `8990`.
+
+
+## Use Docker Compose
 
 Alternatively you may use [Docker Compose](https://docs.docker.com/compose/) to take care for starting and linking
 the containers, by specifying the services in a configuration file `docker-compose.yml` (e.g.):
