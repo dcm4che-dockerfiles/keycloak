@@ -21,7 +21,7 @@ RUN arch="$(dpkg --print-architecture)" \
 
 ENV KEYCLOAK_VERSION=3.4.3.Final \
     LOGSTASH_GELF_VERSION=1.11.1 \
-    DCM4CHE_VERSION=5.12.0 \
+    DCM4CHE_VERSION=5.13.1 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
@@ -35,7 +35,7 @@ RUN cd $HOME \
     && mkdir /docker-entrypoint.d \
     && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
     && cd $JBOSS_HOME \
-    && curl http://www.dcm4che.org/maven2/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}.tar.gz | tar xz \
+    && curl http://maven.dcm4che.org/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}.tar.gz | tar xz \
     && chown -R keycloak:keycloak $JBOSS_HOME
 
 COPY configuration /docker-entrypoint.d/configuration
