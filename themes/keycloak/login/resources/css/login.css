@@ -1,19 +1,6 @@
 .login-pf body {
-    background: url("../img/bg2.jpg");
-    background-repeat: no-repeat;
-    background-size: 100%;
-    -webkit-filter: blur(5px);
-      -moz-filter: blur(5px);
-      -o-filter: blur(5px);
-      -ms-filter: blur(5px);
-      filter: blur(5px);
-    display: block;
-    height: 100%;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: -1;
+    background: #0f0f0f url("../img/bg2.jpg") top left no-repeat;
+    background-size: cover;
 }
 
 .alert-error {
