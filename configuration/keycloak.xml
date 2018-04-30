@@ -30,6 +30,7 @@
         <property name="jboss.http.port" value="${env.HTTP_PORT}"/>
         <property name="jboss.https.port" value="${env.HTTPS_PORT}"/>
         <property name="jboss.management.http.port" value="${env.MANAGEMENT_HTTP_PORT}"/>
+        <property name="super-user-role" value="${env.SUPER_USER_ROLE}"/>
     </system-properties>
     <management>
         <security-realms>

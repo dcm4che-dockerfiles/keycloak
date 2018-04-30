@@ -76,6 +76,13 @@ WILDFLY_ADMIN_USER to create an admin user for Keycloak master realm.
 
 This environment variable sets the password for the KEYCLOAK_ADMIN_USER. Default value is not set.
 
+#### `SUPER_USER_ROLE`
+
+This environment variable sets the user role to identify super users, which have unrestricted access to all UI functions
+of the Archive, bypassing the verification of user permissions. Login/Logout of such users will emit an [Audit Message
+for Security Alert](http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.11) with EventTypeCode
+`(110127,DCM,"Emergency Override Started")`/`(110138,DCM,"Emergency Override Stopped")`. Default value is `admin`.
+
 #### `KEYSTORE`
 
 This environment variable sets the keystore used in ssl server identities in Wildfly configuration. Default value is `dcm4chee-arc/key.jks`.

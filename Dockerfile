@@ -63,6 +63,7 @@ ENV LDAP_HOST=ldap \
     TRUSTSTORE_PASSWORD=secret \
     SSL_REQUIRED=external \
     REALM_NAME=dcm4che \
+    SUPER_USER_ROLE=admin \
     HOSTNAME_VERIFICATION_POLICY=ANY \
     SYSLOG_HOST=logstash \
     GELF_FACILITY=keycloak \
