@@ -40,7 +40,7 @@ RUN cd $HOME \
 
 COPY configuration /docker-entrypoint.d/configuration
 
-COPY themes $JBOSS_HOME/themes
+# COPY themes $JBOSS_HOME/themes
 
 # Default configuration: can be overridden at the docker command line
 ENV LDAP_HOST=ldap \
