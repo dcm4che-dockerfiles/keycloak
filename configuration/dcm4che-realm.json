@@ -468,7 +468,7 @@
             "WRITABLE"
           ],
           "validatePasswordPolicy": [
-            "${env.VALIDATE_PASSWORD_POLICY"
+            "${env.VALIDATE_PASSWORD_POLICY}"
           ],
           "batchSizeForSync": [
             "1000"
