@@ -62,6 +62,7 @@ ENV LDAP_HOST=ldap \
     TRUSTSTORE=keycloak/cacerts.jks \
     TRUSTSTORE_PASSWORD=secret \
     SSL_REQUIRED=external \
+    VALIDATE_PASSWORD_POLICY=false \
     REALM_NAME=dcm4che \
     SUPER_USER_ROLE=admin \
     HOSTNAME_VERIFICATION_POLICY=ANY \

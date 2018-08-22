@@ -9,6 +9,8 @@
   "ssoSessionIdleTimeout": 1800,
   "ssoSessionMaxLifespan": 36000,
   "offlineSessionIdleTimeout": 2592000,
+  "offlineSessionMaxLifespanEnabled": false,
+  "offlineSessionMaxLifespan": 5184000,
   "accessCodeLifespan": 60,
   "accessCodeLifespanUserAction": 300,
   "accessCodeLifespanLogin": 1800,
@@ -49,7 +51,6 @@
     "FreeOTP",
     "Google Authenticator"
   ],
-  "clientTemplates": [],
   "browserSecurityHeaders": {
     "xContentTypeOptions": "nosniff",
     "xRobotsTag": "none",
@@ -85,9 +86,6 @@
             "oidc-usermodel-attribute-mapper",
             "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-property-mapper"
-          ],
-          "consent-required-for-all-mappers": [
-            "true"
           ]
         }
       },
@@ -123,9 +121,6 @@
             "saml-user-attribute-mapper",
             "saml-role-list-mapper",
             "oidc-full-name-mapper"
-          ],
-          "consent-required-for-all-mappers": [
-            "true"
           ]
         }
       },
@@ -471,6 +466,9 @@
           ],
           "editMode": [
             "WRITABLE"
+          ],
+          "validatePasswordPolicy": [
+            "${env.VALIDATE_PASSWORD_POLICY"
           ],
           "batchSizeForSync": [
             "1000"
@@ -874,6 +872,7 @@
       "providerId": "CONFIGURE_TOTP",
       "enabled": true,
       "defaultAction": false,
+      "priority": 0,
       "config": {}
     },
     {
@@ -882,6 +881,7 @@
       "providerId": "UPDATE_PASSWORD",
       "enabled": true,
       "defaultAction": false,
+      "priority": 0,
       "config": {}
     },
     {
@@ -890,6 +890,7 @@
       "providerId": "UPDATE_PROFILE",
       "enabled": true,
       "defaultAction": false,
+      "priority": 0,
       "config": {}
     },
     {
@@ -898,6 +899,7 @@
       "providerId": "VERIFY_EMAIL",
       "enabled": true,
       "defaultAction": false,
+      "priority": 0,
       "config": {}
     },
     {
@@ -906,6 +908,7 @@
       "providerId": "terms_and_conditions",
       "enabled": false,
       "defaultAction": false,
+      "priority": 0,
       "config": {}
     }
   ],
@@ -928,10 +931,13 @@
     "actionTokenGeneratedByUserLifespan": "300",
     "maxDeltaTimeSeconds": "43200",
     "_browser_header.xContentTypeOptions": "nosniff",
+    "offlineSessionMaxLifespan": "5184000",
     "actionTokenGeneratedByAdminLifespan": "43200",
     "bruteForceProtected": "false",
     "_browser_header.contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
-    "waitIncrementSeconds": "60"
+    "waitIncrementSeconds": "60",
+    "offlineSessionMaxLifespanEnabled": "false"
   },
-  "keycloakVersion": "4.0.0.Final"
+  "keycloakVersion": "4.3.0.Final",
+  "userManagedAccessAllowed": false
 }

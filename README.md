@@ -113,13 +113,17 @@ This environment variable sets the password of the above truststore. Default val
 This environment variable defines the SSL/HTTPS requirements for interacting with the realm. Default value is `external`.
 Values which are accepted are : `external`, `none` or `all`.
 
+#### `VALIDATE_PASSWORD_POLICY`
+
+Indicates if Keycloak should validate the password with the realm password policy before updating it. Default value is `false`.
+
 #### `REALM_NAME`
 
 This is the name of the realm configured in Keycloak for securing archive UI and RESTful services. Default value is `dcm4che`. 
 
 #### `HOSTNAME_VERIFICATION_POLICY`
 
-This environment variable sets the verification policy for the hostname to be validated/authenticated. Default value set is `ANY`.
+This environment variable sets the verification policy for the hostname to be validated/authenticated. Default value is `ANY`.
 Values which are accepted are : `ANY`, `WILDCARD` or `STRICT`.
 
 #### `SYSLOG_HOST`
