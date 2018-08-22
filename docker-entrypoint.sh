@@ -12,6 +12,7 @@ if [ "$1" = 'standalone.sh' ]; then
             -e "s%\${env.LDAP_PORT}%${LDAP_PORT}%" \
             -e "s%\${env.LDAP_ROOTPASS}%${LDAP_ROOTPASS}%" \
             -e "s%\${env.SSL_REQUIRED}%${SSL_REQUIRED}%" \
+            -e "s%\${env.VALIDATE_PASSWORD_POLICY}%${VALIDATE_PASSWORD_POLICY}%" \
             -i $JBOSS_HOME/standalone/configuration/dcm4che-realm.json
         if [ -n "$WILDFLY_ADMIN_USER" -a -n "$WILDFLY_ADMIN_PASSWORD" ]; then
             $JBOSS_HOME/bin/add-user.sh $WILDFLY_ADMIN_USER $WILDFLY_ADMIN_PASSWORD --silent
