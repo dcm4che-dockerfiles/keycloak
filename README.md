@@ -4,8 +4,8 @@ This is a Dockerfile for standalone Keycloak server which could be used for secu
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`4.0.0-13.3` (*4.0.0-13.3/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak/blob/master/Dockerfile)
-- [`4.0.0-13.3-logstash` (*4.0.0-13.3-logstash/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak/blob/logstash/Dockerfile)
+- [`4.3.0-14.0` (*4.3.0-14.0/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak/blob/master/Dockerfile)
+- [`4.3.0-14.0-logstash` (*4.3.0-14.0-logstash/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak/blob/logstash/Dockerfile)
 
 ## How to use this image
 
@@ -113,13 +113,17 @@ This environment variable sets the password of the above truststore. Default val
 This environment variable defines the SSL/HTTPS requirements for interacting with the realm. Default value is `external`.
 Values which are accepted are : `external`, `none` or `all`.
 
+#### `VALIDATE_PASSWORD_POLICY`
+
+Indicates if Keycloak should validate the password with the realm password policy before updating it. Default value is `false`.
+
 #### `REALM_NAME`
 
 This is the name of the realm configured in Keycloak for securing archive UI and RESTful services. Default value is `dcm4che`. 
 
 #### `HOSTNAME_VERIFICATION_POLICY`
 
-This environment variable sets the verification policy for the hostname to be validated/authenticated. Default value set is `ANY`.
+This environment variable sets the verification policy for the hostname to be validated/authenticated. Default value is `ANY`.
 Values which are accepted are : `ANY`, `WILDCARD` or `STRICT`.
 
 #### `SYSLOG_HOST`

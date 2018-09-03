@@ -1,4 +1,4 @@
-FROM openjdk:8-jre
+FROM openjdk:8u151-jre
 
 # explicitly set user/group IDs
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
@@ -19,9 +19,9 @@ RUN arch="$(dpkg --print-architecture)" \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=4.0.0.Final \
+ENV KEYCLOAK_VERSION=4.3.0.Final \
     LOGSTASH_GELF_VERSION=1.11.2 \
-    DCM4CHE_VERSION=5.13.3 \
+    DCM4CHE_VERSION=5.14.0 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
@@ -62,6 +62,7 @@ ENV LDAP_HOST=ldap \
     TRUSTSTORE=keycloak/cacerts.jks \
     TRUSTSTORE_PASSWORD=secret \
     SSL_REQUIRED=external \
+    VALIDATE_PASSWORD_POLICY=false \
     REALM_NAME=dcm4che \
     SUPER_USER_ROLE=admin \
     HOSTNAME_VERIFICATION_POLICY=ANY \
