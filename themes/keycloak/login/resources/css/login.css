@@ -441,6 +441,13 @@ a.zocial  {
 
 .login-pf-page .btn-primary {
     margin-top: 0;
+    background:rgba(6, 29, 47, 0.84);
+    background-image:rgba(6, 29, 47, 0.84);
+    border-color:rgba(6, 29, 47, 0.84);
+}
+.login-pf-page .btn-primary:hover,.login-pf-page .btn-primary:active{
+    background:rgba(6, 29, 47, 0.90);
+    background-image:rgba(6, 29, 47, 0.90);
 }
 .login-pf-page{
     background-image: url(../img/logo.png);
