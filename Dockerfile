@@ -35,7 +35,7 @@ RUN cd $HOME \
     && mkdir /docker-entrypoint.d \
     && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
     && cd $JBOSS_HOME \
-    && curl http://maven.dcm4che.org/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}.tar.gz | tar xz \
+    && curl http://maven.dcm4che.org/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}-opencv-3.tar.gz | tar xz \
     && chown -R keycloak:keycloak $JBOSS_HOME
 
 COPY configuration /docker-entrypoint.d/configuration
