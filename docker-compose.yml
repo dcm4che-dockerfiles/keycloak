@@ -11,7 +11,7 @@ services:
       - /var/local/dcm4chee-arc/ldap:/var/lib/ldap
       - /var/local/dcm4chee-arc/slapd.d:/etc/ldap/slapd.d
   keycloak:
-    image: dcm4che/keycloak:4.3.0-14.1
+    image: dcm4che/keycloak:4.4.0-14.1
     ports:
       - "8880:8880"
       - "8843:8843"
