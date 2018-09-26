@@ -42,24 +42,29 @@ COPY configuration /docker-entrypoint.d/configuration
 COPY themes $JBOSS_HOME/themes
 
 # Default configuration: can be overridden at the docker command line
-ENV LDAP_HOST=ldap \
-    LDAP_PORT=389 \
+ENV LDAP_URL=ldap://ldap:389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
     LDAP_ROOTPASS=secret \
+    LDAP_ROOTPASS_FILE= \
     KEYCLOAK_DEVICE_NAME=keycloak \
     HTTP_PORT=8080 \
     HTTPS_PORT=8443 \
     MANAGEMENT_HTTP_PORT=9990 \
     WILDFLY_ADMIN_USER=admin \
     WILDFLY_ADMIN_PASSWORD= \
+    WILDFLY_ADMIN_PASSWORD_FILE= \
     KEYCLOAK_ADMIN_USER= \
     KEYCLOAK_ADMIN_PASSWORD= \
+    KEYCLOAK_ADMIN_PASSWORD_FILE= \
     KEYSTORE=keycloak/key.jks \
     KEYSTORE_PASSWORD=secret \
+    KEYSTORE_PASSWORD_FILE= \
     KEY_PASSWORD=secret \
+    KEY_PASSWORD_FILE= \
     KEYSTORE_TYPE=JKS \
     TRUSTSTORE=keycloak/cacerts.jks \
     TRUSTSTORE_PASSWORD=secret \
+    TRUSTSTORE_PASSWORD_FILE= \
     SSL_REQUIRED=external \
     VALIDATE_PASSWORD_POLICY=false \
     REALM_NAME=dcm4che \

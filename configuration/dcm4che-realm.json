@@ -823,7 +823,7 @@
             "false"
           ],
           "connectionUrl": [
-            "ldap://${env.LDAP_HOST}:${env.LDAP_PORT}"
+            "${env.LDAP_URL}"
           ],
           "syncRegistrations": [
             "true"
