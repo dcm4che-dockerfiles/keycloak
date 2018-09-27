@@ -32,11 +32,14 @@ This environment variable sets the base domain name for LDAP. Default value is `
 
 #### `LDAP_ROOTPASS`
 
-This environment variable sets the password for LDAP. Default value is `secret`. 
+This environment variable sets the password for LDAP.
+Only effective if the file specified by `LDAP_ROOTPASS_FILE` does not exist. Default value is `secret`.
 
 #### `LDAP_ROOTPASS_FILE`
 
-Path to file containing the password for LDAP. Overwrites password set by `LDAP_ROOTPASS`.
+Path to file containing the password for LDAP.
+If the file does not exist, it will be created containing the password specified by `LDAP_ROOTPASS`. 
+Default value is `/tmp/ldap_rootpass`.
 
 #### `KEYCLOAK_DEVICE_NAME`
 
@@ -58,26 +61,22 @@ This environment variable sets the Management Http port of Wildfly. Default valu
 
 This environment variable sets the admin user name for Wildfly. Default value is `admin`.
 
-#### `WILDFLY_ADMIN_PASSWORD`
-
-This environment variable sets the password for the WILDFLY_ADMIN_USER. Default value can be viewed in LDAP, it is set to `admin`.
-
-#### `WILDFLY_ADMIN_PASSWORD_FILE`
-
-Path to file containing the password for the WILDFLY_ADMIN_USER. Overwrites password set by `WILDFLY_ADMIN_PASSWORD`.
-
 #### `KEYCLOAK_ADMIN_USER`
 
-This environment variable sets the admin user name for Keycloak master realm. Default value is not set, will use the default 
-WILDFLY_ADMIN_USER to create an admin user for Keycloak master realm.
+This environment variable sets the admin user name for Keycloak master realm. If not specified, no admin user 
+for the Keycloak master realm will be created.
 
 #### `KEYCLOAK_ADMIN_PASSWORD`
 
-This environment variable sets the password for the KEYCLOAK_ADMIN_USER. Default value is not set.
+This environment variable sets the password for the `KEYCLOAK_ADMIN_USER`.
+Only effective if `KEYCLOAK_ADMIN_USER` is set and the file specified by `KEYCLOAK_ADMIN_PASSWORD_FILE` does not exist.
 
 #### `KEYCLOAK_ADMIN_PASSWORD_FILE`
 
-Path to file containing the password for the KEYCLOAK_ADMIN_USER. Overwrites password set by `KEYCLOAK_ADMIN_PASSWORD`.
+Path to file containing the password for the `KEYCLOAK_ADMIN_USER`. Only effective if `KEYCLOAK_ADMIN_USER` is set.
+If the file does not exist and if `KEYCLOAK_ADMIN_PASSWORD` is set, it will be created containing the password
+specified by `KEYSTORE_PASSWORD`.
+Default value is `/tmp/keycloak_admin_password`.
 
 #### `SUPER_USER_ROLE`
 
@@ -92,19 +91,25 @@ This environment variable sets the keystore used in ssl server identities in Wil
 
 #### `KEYSTORE_PASSWORD`
 
-This environment variables sets the password of the keystore used in ssl server identities in Wildfly configuration. Default value is `secret`.
+This environment variables sets the password of the keystore used in ssl server identities in Wildfly configuration.
+Only effective if the file specified by `KEYSTORE_PASSWORD_FILE` does not exist. Default value is `secret`.
 
 #### `KEYSTORE_PASSWORD_FILE`
 
-Path to file containing the password of the keystore used in ssl server identities in Wildfly configuration. Overwrites password set by `KEYSTORE_PASSWORD`.
+Path to file containing the password of the keystore used in ssl server identities in Wildfly configuration.
+If the file does not exist, it will be created containing the password specified by `KEYSTORE_PASSWORD`. 
+Default value is `/tmp/keystore_password`.
 
 #### `KEY_PASSWORD`
 
-This environment variables sets the password of the key used in ssl server identities in Wildfly configuration. Default value is `secret`.
+This environment variables sets the password of the key used in ssl server identities in Wildfly configuration.
+Only effective if the file specified by `KEY_PASSWORD_FILE` does not exist. Default value is `secret`.
 
 #### `KEY_PASSWORD_FILE`
 
-Path to file containing the password of the key used in ssl server identities in Wildfly configuration. Overwrites password set by `KEY_PASSWORD`.
+Path to file containing the password of the key used in ssl server identities in Wildfly configuration.
+If the file does not exist, it will be created containing the password specified by `KEY_PASSWORD`. 
+Default value is `/tmp/key_password`.
 
 #### `KEYSTORE_TYPE`
 
@@ -117,11 +122,14 @@ in Https communication. Default value is `keycloak/cacerts.jks`.
 
 #### `TRUSTSTORE_PASSWORD`
 
-This environment variable sets the password of the above truststore. Default value is `secret`.
+This environment variable sets the password of the above truststore.
+Only effective if the file specified by `TRUSTSTORE_PASSWORD_FILE` does not exist. Default value is `secret`.
 
 #### `TRUSTSTORE_PASSWORD_FILE`
 
-Path to file containing the password of the above truststore. Overwrites password set by `TRUSTSTORE_PASSWORD`.
+Path to file containing the password of the above truststore.
+If the file does not exist, it will be created containing the password specified by `TRUSTSTORE_PASSWORD`. 
+Default value is `/tmp/truststore_password`.
 
 #### `SSL_REQUIRED`
 

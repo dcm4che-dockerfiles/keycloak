@@ -4,28 +4,34 @@ set -e
 
 if [ "$1" = 'standalone.sh' ]; then
 
-    if [ -n "$LDAP_ROOTPASS_FILE" ] && [ -f $LDAP_ROOTPASS_FILE ]; then
-        LDAP_ROOTPASS=$(cat $LDAP_ROOTPASS_FILE)
+    if [ -f $LDAP_ROOTPASS_FILE ]; then
+        LDAP_ROOTPASS=`cat $LDAP_ROOTPASS_FILE`
+    else
+        echo $LDAP_ROOTPASS > $LDAP_ROOTPASS_FILE
     fi
 
-    if [ -n "$WILDFLY_ADMIN_PASSWORD_FILE" ] && [ -f $WILDFLY_ADMIN_PASSWORD_FILE ]; then
-        WILDFLY_ADMIN_PASSWORD=$(cat $WILDFLY_ADMIN_PASSWORD_FILE)
+    if [ -f $KEYCLOAK_ADMIN_PASSWORD_FILE ]; then
+        KEYCLOAK_ADMIN_PASSWORD=`cat $KEYCLOAK_ADMIN_PASSWORD_FILE`
+    elif [ -n "$KEYCLOAK_ADMIN_PASSWORD" ]; then
+        echo $KEYCLOAK_ADMIN_PASSWORD > $KEYCLOAK_ADMIN_PASSWORD_FILE
     fi
 
-    if [ -n "$KEYCLOAK_ADMIN_PASSWORD_FILE" ] && [ -f $KEYCLOAK_ADMIN_PASSWORD_FILE ]; then
-        KEYCLOAK_ADMIN_PASSWORD=$(cat $KEYCLOAK_ADMIN_PASSWORD_FILE)
+    if [ -f $KEYSTORE_PASSWORD_FILE ]; then
+        KEYSTORE_PASSWORD=`cat $KEYSTORE_PASSWORD_FILE`
+    else
+        echo $KEYSTORE_PASSWORD > $KEYSTORE_PASSWORD_FILE
     fi
 
-    if [ -n "$KEYSTORE_PASSWORD_FILE" ] && [ -f $KEYSTORE_PASSWORD_FILE ]; then
-        KEYSTORE_PASSWORD=$(cat $KEYSTORE_PASSWORD_FILE)
+    if [ -f $KEY_PASSWORD_FILE ]; then
+        KEY_PASSWORD=`cat $KEY_PASSWORD_FILE`
+    else
+        echo $KEY_PASSWORD > $KEY_PASSWORD_FILE
     fi
 
-    if [ -n "$KEY_PASSWORD_FILE" ] && [ -f $KEY_PASSWORD_FILE ]; then
-        KEY_PASSWORD=$(cat $KEY_PASSWORD_FILE)
-    fi
-
-    if [ -n "$TRUSTSTORE_PASSWORD_FILE" ] && [ -f $TRUSTSTORE_PASSWORD_FILE ]; then
-        TRUSTSTORE_PASSWORD=$(cat $TRUSTSTORE_PASSWORD_FILE)
+    if [ -f $TRUSTSTORE_PASSWORD_FILE ]; then
+        TRUSTSTORE_PASSWORD=`cat $TRUSTSTORE_PASSWORD_FILE`
+    else
+        echo $TRUSTSTORE_PASSWORD > $TRUSTSTORE_PASSWORD_FILE
     fi
 
     if [ ! -d $JBOSS_HOME/standalone/configuration ]; then
@@ -38,17 +44,14 @@ if [ "$1" = 'standalone.sh' ]; then
             -e "s%\${env.SSL_REQUIRED}%${SSL_REQUIRED}%" \
             -e "s%\${env.VALIDATE_PASSWORD_POLICY}%${VALIDATE_PASSWORD_POLICY}%" \
             -i $JBOSS_HOME/standalone/configuration/dcm4che-realm.json
-        if [ -n "$WILDFLY_ADMIN_USER" -a -n "$WILDFLY_ADMIN_PASSWORD" ]; then
-            $JBOSS_HOME/bin/add-user.sh $WILDFLY_ADMIN_USER $WILDFLY_ADMIN_PASSWORD --silent
-        fi
         if [ -n "$KEYCLOAK_ADMIN_USER" -a -n "$KEYCLOAK_ADMIN_PASSWORD" ]; then
             $JBOSS_HOME/bin/add-user-keycloak.sh -r master -u $KEYCLOAK_ADMIN_USER -p $KEYCLOAK_ADMIN_PASSWORD
         fi
         chown -R keycloak:keycloak $JBOSS_HOME/standalone
     fi
 
-    if [ ! -f /importcacerts.done ]; then
-        touch /importcacerts.done
+    if [ ! -f $JAVA_HOME/lib/security/cacerts.done ]; then
+        touch $JAVA_HOME/lib/security/cacerts.done
         keytool -importkeystore \
             -srckeystore $JBOSS_HOME/standalone/configuration/$TRUSTSTORE -srcstorepass $TRUSTSTORE_PASSWORD \
             -destkeystore $JAVA_HOME/lib/security/cacerts -deststorepass changeit
