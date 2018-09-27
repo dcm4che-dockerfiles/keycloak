@@ -63,7 +63,6 @@ ENV LDAP_URL=ldap://ldap:389 \
     TRUSTSTORE=keycloak/cacerts.jks \
     TRUSTSTORE_PASSWORD=secret \
     TRUSTSTORE_PASSWORD_FILE=/tmp/truststore_password \
-    TRUSTSTORE_PASSWORD_FILE= \
     SSL_REQUIRED=external \
     VALIDATE_PASSWORD_POLICY=false \
     REALM_NAME=dcm4che \
