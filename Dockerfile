@@ -19,9 +19,9 @@ RUN arch="$(dpkg --print-architecture)" \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=4.4.0.Final \
+ENV KEYCLOAK_VERSION=4.5.0.Final \
     LOGSTASH_GELF_VERSION=1.12.0 \
-    DCM4CHE_VERSION=5.14.1 \
+    DCM4CHE_VERSION=5.15.0 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
@@ -35,7 +35,7 @@ RUN cd $HOME \
     && mkdir /docker-entrypoint.d \
     && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
     && cd $JBOSS_HOME \
-    && curl http://maven.dcm4che.org/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}-opencv-3.tar.gz | tar xz \
+    && curl http://maven.dcm4che.org/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}.tar.gz | tar xz \
     && chown -R keycloak:keycloak $JBOSS_HOME
 
 COPY configuration /docker-entrypoint.d/configuration
