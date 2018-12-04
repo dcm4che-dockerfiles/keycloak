@@ -4,8 +4,8 @@ This is a Dockerfile for standalone Keycloak server which could be used for secu
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`4.5.0-15.0` (*4.5.0-15.0/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak/blob/master/Dockerfile)
-- [`4.5.0-15.0-logstash` (*4.5.0-15.0-logstash/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak/blob/logstash/Dockerfile)
+- [`4.6.0-15.1` (*4.6.0-15.1/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak/blob/master/Dockerfile)
+- [`4.6.0-15.1-logstash` (*4.6.0-15.1-logstash/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak/blob/logstash/Dockerfile)
 
 ## How to use this image
 
