@@ -87,7 +87,8 @@ for Security Alert](http://dicom.nema.org/medical/dicom/current/output/html/part
 
 #### `KEYSTORE`
 
-This environment variable sets the keystore used in ssl server identities in Wildfly configuration. Default value is `dcm4chee-arc/key.jks`.
+This environment variable sets the keystore used in ssl server identities in Wildfly configuration. Default value is
+`/opt/keycloak/standalone/configuration/keycloak/key.jks`.
 
 #### `KEYSTORE_PASSWORD`
 
@@ -118,7 +119,7 @@ This environment variable sets the type of keystore that is used above. Default 
 #### `TRUSTSTORE`
 
 This environment variable sets the truststore which will be used to verify archive's certificate and/or keycloak-proxy's certificate 
-in Https communication. Default value is `keycloak/cacerts.jks`.
+in Https communication. Default value is `/opt/keycloak/standalone/configuration/keycloak/cacerts.jks`.
 
 #### `TRUSTSTORE_PASSWORD`
 
