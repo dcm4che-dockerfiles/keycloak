@@ -18,6 +18,7 @@
         <extension module="org.jboss.as.transactions"/>
         <extension module="org.keycloak.keycloak-server-subsystem"/>
         <extension module="org.wildfly.extension.bean-validation"/>
+        <extension module="org.wildfly.extension.core-management"/>
         <extension module="org.wildfly.extension.elytron"/>
         <extension module="org.wildfly.extension.io"/>
         <extension module="org.wildfly.extension.request-controller"/>
