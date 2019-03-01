@@ -4,7 +4,7 @@ FROM openjdk:8u151-jre
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
 
 # grab gosu for easy step-down from root
-ENV GOSU_VERSION 1.10
+ENV GOSU_VERSION 1.11
 RUN arch="$(dpkg --print-architecture)" \
     && set -x \
     && apt-get update \
@@ -13,7 +13,7 @@ RUN arch="$(dpkg --print-architecture)" \
     && curl -o /usr/local/bin/gosu -fSL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$arch" \
     && curl -o /usr/local/bin/gosu.asc -fSL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$arch.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+    && gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
     && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
     && rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
@@ -21,7 +21,7 @@ RUN arch="$(dpkg --print-architecture)" \
 
 ENV KEYCLOAK_VERSION=4.6.0.Final \
     LOGSTASH_GELF_VERSION=1.12.0 \
-    DCM4CHE_VERSION=5.15.1 \
+    DCM4CHE_VERSION=5.16.0 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
