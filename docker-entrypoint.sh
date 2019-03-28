@@ -4,31 +4,31 @@ set -e
 
 if [ "$1" = 'standalone.sh' ]; then
 
-    if [ -f $LDAP_ROOTPASS_FILE ]; then
+    if [ -n $LDAP_ROOTPASS_FILE -a -f $LDAP_ROOTPASS_FILE ]; then
         LDAP_ROOTPASS=`cat $LDAP_ROOTPASS_FILE`
     else
         echo $LDAP_ROOTPASS > $LDAP_ROOTPASS_FILE
     fi
 
-    if [ -f $KEYCLOAK_ADMIN_PASSWORD_FILE ]; then
+    if [ -n $KEYCLOAK_ADMIN_PASSWORD_FILE -a -f $KEYCLOAK_ADMIN_PASSWORD_FILE ]; then
         KEYCLOAK_ADMIN_PASSWORD=`cat $KEYCLOAK_ADMIN_PASSWORD_FILE`
     elif [ -n "$KEYCLOAK_ADMIN_PASSWORD" ]; then
         echo $KEYCLOAK_ADMIN_PASSWORD > $KEYCLOAK_ADMIN_PASSWORD_FILE
     fi
 
-    if [ -f $KEYSTORE_PASSWORD_FILE ]; then
+    if [ -n $KEYSTORE_PASSWORD_FILE -a -f $KEYSTORE_PASSWORD_FILE ]; then
         KEYSTORE_PASSWORD=`cat $KEYSTORE_PASSWORD_FILE`
     else
         echo $KEYSTORE_PASSWORD > $KEYSTORE_PASSWORD_FILE
     fi
 
-    if [ -f $KEY_PASSWORD_FILE ]; then
+    if [ -n $KEY_PASSWORD_FILE -a -f $KEY_PASSWORD_FILE ]; then
         KEY_PASSWORD=`cat $KEY_PASSWORD_FILE`
     else
         echo $KEY_PASSWORD > $KEY_PASSWORD_FILE
     fi
 
-    if [ -f $TRUSTSTORE_PASSWORD_FILE ]; then
+    if [ -n $TRUSTSTORE_PASSWORD_FILE -a -f $TRUSTSTORE_PASSWORD_FILE ]; then
         TRUSTSTORE_PASSWORD=`cat $TRUSTSTORE_PASSWORD_FILE`
     else
         echo $TRUSTSTORE_PASSWORD > $TRUSTSTORE_PASSWORD_FILE
@@ -52,9 +52,11 @@ if [ "$1" = 'standalone.sh' ]; then
 
     if [ ! -f $JAVA_HOME/lib/security/cacerts.done ]; then
         touch $JAVA_HOME/lib/security/cacerts.done
-        keytool -importkeystore \
-            -srckeystore $TRUSTSTORE -srcstorepass $TRUSTSTORE_PASSWORD \
-            -destkeystore $JAVA_HOME/lib/security/cacerts -deststorepass changeit
+        if [ -n "$TRUSTSTORE" -a -n "$TRUSTSTORE_PASSWORD" ]; then
+            keytool -importkeystore \
+                -srckeystore $TRUSTSTORE -srcstorepass $TRUSTSTORE_PASSWORD \
+                -destkeystore $JAVA_HOME/lib/security/cacerts -deststorepass changeit
+        fi
     fi
 
     for c in $KEYCLOAK_WAIT_FOR; do
