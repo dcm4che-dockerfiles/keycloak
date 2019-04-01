@@ -46,6 +46,7 @@ ENV LDAP_URL=ldap://ldap:389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
     LDAP_ROOTPASS=secret \
     LDAP_ROOTPASS_FILE=/tmp/ldap_rootpass \
+    LDAP_DISABLE_HOSTNAME_VERIFICATION=true \
     KEYCLOAK_DEVICE_NAME=keycloak \
     HTTP_PORT=8080 \
     HTTPS_PORT=8443 \

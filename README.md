@@ -41,6 +41,11 @@ Path to file containing the password for LDAP.
 If the file does not exist, it will be created containing the password specified by `LDAP_ROOTPASS`. 
 Default value is `/tmp/ldap_rootpass`.
 
+#### `LDAP_DISABLE_HOSTNAME_VERIFICATION`
+
+Indicates to disable the verification of the hostname of the certificate of the LDAP server,
+if using TLS (`LDAP_URL=ldaps://<host>:<port>`). Default value is `true`.
+
 #### `KEYCLOAK_DEVICE_NAME`
 
 This is the name of `keycloak` device that is configured in LDAP. Default value is `keycloak`
@@ -137,6 +142,16 @@ Default value is `/tmp/truststore_password`.
 This environment variable defines the SSL/HTTPS requirements for interacting with the realm. Default value is `external`.
 Values which are accepted are : `external`, `none` or `all`.
 
+#### `HOSTNAME_VERIFICATION_POLICY`
+
+Specifies if Keycloak shall verify the hostname of the server’s certificate on outgoing HTTPS requests.
+Accepted values are:
+- `ANY` - the hostname is not verified.
+- `WILDCARD` - allows wildcards in subdomain names i.e. `*.foo.com`.
+- `STRICT` - CN must match hostname exactly.
+
+Default value is `ANY`.
+
 #### `VALIDATE_PASSWORD_POLICY`
 
 Indicates if Keycloak should validate the password with the realm password policy before updating it. Default value is `false`.
@@ -144,11 +159,6 @@ Indicates if Keycloak should validate the password with the realm password polic
 #### `REALM_NAME`
 
 This is the name of the realm configured in Keycloak for securing archive UI and RESTful services. Default value is `dcm4che`. 
-
-#### `HOSTNAME_VERIFICATION_POLICY`
-
-This environment variable sets the verification policy for the hostname to be validated/authenticated. Default value is `ANY`.
-Values which are accepted are : `ANY`, `WILDCARD` or `STRICT`.
 
 #### `SYSLOG_HOST`
 
