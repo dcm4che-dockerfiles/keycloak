@@ -1,4 +1,4 @@
-FROM openjdk:11.0.2-jre-stretch
+FROM openjdk:11.0.3-jre-stretch
 
 # explicitly set user/group IDs
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
@@ -21,7 +21,7 @@ RUN arch="$(dpkg --print-architecture)" \
 
 ENV KEYCLOAK_VERSION=6.0.0 \
     LOGSTASH_GELF_VERSION=1.13.0 \
-    DCM4CHE_VERSION=5.16.1 \
+    DCM4CHE_VERSION=5.16.2 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
