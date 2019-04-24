@@ -35,6 +35,7 @@
         <property name="jboss.http.port" value="${env.HTTP_PORT}"/>
         <property name="jboss.https.port" value="${env.HTTPS_PORT}"/>
         <property name="jboss.management.http.port" value="${env.MANAGEMENT_HTTP_PORT}"/>
+        <property name="jboss.management.https.port" value="${env.MANAGEMENT_HTTPS_PORT}"/>
         <property name="super-user-role" value="${env.SUPER_USER_ROLE}"/>
     </system-properties>
     <management>
@@ -51,11 +52,6 @@
                 </authorization>
             </security-realm>
             <security-realm name="ApplicationRealm">
-                <server-identities>
-                    <ssl>
-                        <keystore path="${env.KEYSTORE}" keystore-password="${env.KEYSTORE_PASSWORD}" key-password="${env.KEY_PASSWORD}" provider="${env.KEYSTORE_TYPE}"/>
-                    </ssl>
-                </server-identities>
                 <authentication>
                     <local default-user="$local" allowed-users="*" skip-group-loading="true"/>
                     <properties path="application-users.properties" relative-to="jboss.server.config.dir"/>
@@ -82,9 +78,9 @@
             </logger>
         </audit-log>
         <management-interfaces>
-            <http-interface security-realm="ManagementRealm">
+            <http-interface ssl-context="httpsSSC">
                 <http-upgrade enabled="true"/>
-                <socket-binding http="management-http"/>
+                <socket-binding http="management-http" https="management-https"/>
             </http-interface>
         </management-interfaces>
         <access-control provider="simple">
@@ -432,6 +428,23 @@
                 </mechanism-provider-filtering-sasl-server-factory>
                 <provider-sasl-server-factory name="global"/>
             </sasl>
+            <tls>
+                <key-stores>
+                    <key-store name="httpsKS">
+                        <credential-reference clear-text="${env.KEYSTORE_PASSWORD}"/>
+                        <implementation type="${env.KEYSTORE_TYPE}"/>
+                        <file path="${env.KEYSTORE}"/>
+                    </key-store>
+                </key-stores>
+                <key-managers>
+                    <key-manager name="httpsKM" algorithm="SunX509" key-store="httpsKS">
+                        <credential-reference clear-text="${env.KEY_PASSWORD}"/>
+                    </key-manager>
+                </key-managers>
+                <server-ssl-contexts>
+                    <server-ssl-context name="httpsSSC" protocols="TLSv1.2" key-manager="httpsKM"/>
+                </server-ssl-contexts>
+            </tls>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:security:2.0">
             <security-domains>
@@ -482,7 +495,7 @@
             <buffer-cache name="default"/>
             <server name="default-server">
                 <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true"/>
-                <https-listener name="https" socket-binding="https" security-realm="ApplicationRealm" enable-http2="true"/>
+                <https-listener name="https" socket-binding="https" ssl-context="httpsSSC"  enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
                     <http-invoker security-realm="ApplicationRealm"/>
