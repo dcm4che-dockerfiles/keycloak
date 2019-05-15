@@ -1,7 +1,7 @@
-version: "2"
+version: "3"
 services:
   ldap:
-    image: dcm4che/slapd-dcm4chee:2.4.44-16.2
+    image: dcm4che/slapd-dcm4chee:2.4.44-17.0
     environment:
       LDAP_URLS: "ldap:/// ldaps:///"
     ports:
@@ -14,7 +14,7 @@ services:
       - /var/local/dcm4chee-arc/ldap:/var/lib/ldap
       - /var/local/dcm4chee-arc/slapd.d:/etc/ldap/slapd.d
   keycloak:
-    image: dcm4che/keycloak:6.0.0-16.2
+    image: dcm4che/keycloak:6.0.0-17.0
     ports:
       - "8880:8880"
       - "8843:8843"
