@@ -10,6 +10,12 @@ if [ "$1" = 'standalone.sh' ]; then
         echo $LDAP_ROOTPASS > $LDAP_ROOTPASS_FILE
     fi
 
+    if [ -n $POSTGRES_PASSWORD_FILE -a -f $POSTGRES_PASSWORD_FILE ]; then
+        POSTGRES_PASSWORD=`cat $POSTGRES_PASSWORD_FILE`
+    else
+        echo $POSTGRES_PASSWORD > $POSTGRES_PASSWORD_FILE
+    fi
+
     if [ -n $KEYCLOAK_ADMIN_PASSWORD_FILE -a -f $KEYCLOAK_ADMIN_PASSWORD_FILE ]; then
         KEYCLOAK_ADMIN_PASSWORD=`cat $KEYCLOAK_ADMIN_PASSWORD_FILE`
     elif [ -n "$KEYCLOAK_ADMIN_PASSWORD" ]; then

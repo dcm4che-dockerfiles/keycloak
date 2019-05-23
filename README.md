@@ -46,6 +46,39 @@ Default value is `/tmp/ldap_rootpass`.
 Indicates to disable the verification of the hostname of the certificate of the LDAP server,
 if using TLS (`LDAP_URL=ldaps://<host>:<port>`). Default value is `true`.
 
+#### `POSTGRES_HOST`
+
+This environment variable sets the host name for POSTGRES. Default value is `db`.
+
+#### `POSTGRES_PORT`
+
+This environment variable sets the port for POSTGRES. Default value is `5432`.
+
+#### `POSTGRES_DB`
+
+This environment variable defines the name for the default database. Default value is `keycloakdb`. 
+
+#### `POSTGRES_USER`
+
+This environment variable used in conjunction with POSTGRES_PASSWORD is the user with superuser power and its password. 
+Default value is `keycloak`. 
+
+#### `POSTGRES_PASSWORD`
+
+This environment variable is the password for PostgreSQL. 
+Only effective if the file specified by `POSTGRES_PASSWORD_FILE` does not exist. Default value is `keycloak`.
+
+#### `POSTGRES_PASSWORD_FILE`
+
+Path to file containing the password for PostgreSQL.
+If the file does not exist, it will be created containing the password specified by `POSTGRES_PASSWORD`. 
+Default value is `/tmp/postgres_password`.
+
+#### `WILDFLY_KEYCLOAKDS_MAX_POOL_SIZE`
+
+This environment variable sets the maximum pool size allowed for the KeycloakDS datasource in the Wildfly configuration.
+Default value is `50`.
+
 #### `KEYCLOAK_DEVICE_NAME`
 
 This is the name of `keycloak` device that is configured in LDAP. Default value is `keycloak`

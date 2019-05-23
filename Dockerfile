@@ -36,6 +36,8 @@ RUN cd $HOME \
     && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
     && cd $JBOSS_HOME \
     && curl http://maven.dcm4che.org/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules/1.0.0/jdbc-jboss-modules-1.0.0-psql.tar.gz | tar xz \
+    && curl -fo modules/org/postgresql/main/postgresql-42.2.5.jar https://jdbc.postgresql.org/download/postgresql-42.2.5.jar \
     && chown -R keycloak:keycloak $JBOSS_HOME
 
 COPY configuration /docker-entrypoint.d/configuration
@@ -47,6 +49,13 @@ ENV LDAP_URL=ldap://ldap:389 \
     LDAP_ROOTPASS=secret \
     LDAP_ROOTPASS_FILE=/tmp/ldap_rootpass \
     LDAP_DISABLE_HOSTNAME_VERIFICATION=true \
+    POSTGRES_HOST=db \
+    POSTGRES_PORT=5432 \
+    POSTGRES_DB=keycloakdb \
+    POSTGRES_USER=keycloak \
+    POSTGRES_PASSWORD=keycloak \
+    POSTGRES_PASSWORD_FILE=/tmp/postgres_password \
+    WILDFLY_KEYCLOAKDS_MAX_POOL_SIZE=50 \
     KEYCLOAK_DEVICE_NAME=keycloak \
     HTTP_PORT=8080 \
     HTTPS_PORT=8443 \

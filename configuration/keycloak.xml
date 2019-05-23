@@ -140,18 +140,27 @@
                         <password>sa</password>
                     </security>
                 </datasource>
-                <datasource jndi-name="java:jboss/datasources/KeycloakDS" pool-name="KeycloakDS" enabled="true" use-java-context="true" statistics-enabled="${wildfly.datasources.statistics-enabled:${wildfly.statistics-enabled:false}}">
-                    <connection-url>jdbc:h2:${jboss.server.data.dir}/keycloak;AUTO_SERVER=TRUE</connection-url>
-                    <driver>h2</driver>
+                <datasource jndi-name="java:jboss/datasources/KeycloakDS" pool-name="KeycloakDS" statistics-enabled="true">
+                    <connection-url>jdbc:postgresql://${env.POSTGRES_HOST}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}</connection-url>
+                    <driver>psql</driver>
+                    <pool>
+                        <max-pool-size>${env.WILDFLY_KEYCLOAKDS_MAX_POOL_SIZE}</max-pool-size>
+                    </pool>
                     <security>
-                        <user-name>sa</user-name>
-                        <password>sa</password>
+                        <user-name>${env.POSTGRES_USER}</user-name>
+                        <password>${env.POSTGRES_PASSWORD}</password>
                     </security>
+                    <validation>
+                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
+                        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
+                        <background-validation-millis>10000</background-validation-millis>
+                    </validation>
                 </datasource>
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
                     </driver>
+                    <driver name="psql" module="org.postgresql"/>
                 </drivers>
             </datasources>
         </subsystem>
