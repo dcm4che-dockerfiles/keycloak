@@ -40,48 +40,15 @@ RUN cd $HOME \
     && curl -fo modules/org/postgresql/main/postgresql-42.2.5.jar https://jdbc.postgresql.org/download/postgresql-42.2.5.jar \
     && chown -R keycloak:keycloak $JBOSS_HOME
 
+COPY docker-entrypoint.sh /
 COPY configuration /docker-entrypoint.d/configuration
 COPY themes $JBOSS_HOME/themes
 
-# Default configuration: can be overridden at the docker command line
 ENV LDAP_URL=ldap://ldap:389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
-    LDAP_ROOTPASS=secret \
-    LDAP_ROOTPASS_FILE=/tmp/ldap_rootpass \
-    LDAP_DISABLE_HOSTNAME_VERIFICATION=true \
-    POSTGRES_HOST=db \
-    POSTGRES_PORT=5432 \
-    POSTGRES_DB=keycloakdb \
-    POSTGRES_USER=keycloak \
-    POSTGRES_PASSWORD=keycloak \
-    POSTGRES_PASSWORD_FILE=/tmp/postgres_password \
-    WILDFLY_KEYCLOAKDS_MAX_POOL_SIZE=50 \
-    KEYCLOAK_DEVICE_NAME=keycloak \
-    HTTP_PORT=8080 \
-    HTTPS_PORT=8443 \
-    MANAGEMENT_HTTP_PORT=9990 \
-    MANAGEMENT_HTTPS_PORT=9993 \
-    WILDFLY_ADMIN_USER=admin \
-    KEYCLOAK_ADMIN_USER= \
-    KEYCLOAK_ADMIN_PASSWORD= \
-    KEYCLOAK_ADMIN_PASSWORD_FILE=/tmp/keycloak_admin_password \
-    KEYSTORE=/opt/keycloak/standalone/configuration/keycloak/key.jks \
-    KEYSTORE_PASSWORD=secret \
-    KEYSTORE_PASSWORD_FILE=/tmp/keystore_password \
-    KEY_PASSWORD=secret \
-    KEY_PASSWORD_FILE=/tmp/key_password \
-    KEYSTORE_TYPE=JKS \
-    TRUSTSTORE=/opt/keycloak/standalone/configuration/keycloak/cacerts.jks \
-    TRUSTSTORE_PASSWORD=secret \
-    TRUSTSTORE_PASSWORD_FILE=/tmp/truststore_password \
-    SSL_REQUIRED=external \
-    VALIDATE_PASSWORD_POLICY=false \
-    REALM_NAME=dcm4che \
-    SUPER_USER_ROLE=admin \
-    HOSTNAME_VERIFICATION_POLICY=ANY \
-    SYSLOG_HOST=logstash \
-    GELF_FACILITY=keycloak \
-    GELF_LEVEL=WARN \
+    KEYSTORE=/opt/keycloak/standalone/configuration/keystores/key.jks \
+    TRUSTSTORE=/opt/keycloak/standalone/configuration/keystores/cacerts.jks \
+    KEYCLOAK_IMPORT=/opt/keycloak/standalone/configuration/dcm4che-realm.json \
     JAVA_OPTS="-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
@@ -91,10 +58,5 @@ ENV PATH $JBOSS_HOME/bin:$PATH
 
 VOLUME /opt/keycloak/standalone
 
-COPY docker-entrypoint.sh /
-
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "-c", "keycloak.xml", \
-     "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=singleFile", \
-     "-Dkeycloak.migration.file=/opt/keycloak/standalone/configuration/dcm4che-realm.json", \
-     "-Dkeycloak.migration.strategy=IGNORE_EXISTING" ]
+CMD ["standalone.sh"]

@@ -1,11 +1,7 @@
 # Keycloak Docker image
 
-This is a Dockerfile for standalone Keycloak server which could be used for securing the DICOM Archive [dcm4chee-arc-light](https://github.com/dcm4che/dcm4chee-arc-light/wiki).
-
-## Supported tags and respective `Dockerfile` links
-
-- [`6.0.0-16.2` (*6.0.0-16.2/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak/blob/master/Dockerfile)
-- [`6.0.0-16.2-logstash` (*6.0.0-16.2-logstash/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak/blob/logstash/Dockerfile)
+This docker image provides [Keycloak Authentication Server](https://www.keycloak.org/) initialized for securing the
+DICOM Archive [dcm4chee-arc-light](https://github.com/dcm4che/dcm4chee-arc-light/wiki).
 
 ## How to use this image
 
@@ -24,161 +20,164 @@ then ensure that the same values are also used for overriding the defaults durin
 
 #### `LDAP_URL`
 
-This environment variable sets the URL for accessing LDAP. Default value is `ldap://ldap:389`.
+URL for accessing LDAP (optional, default is `ldap://ldap:389`).
 
 #### `LDAP_BASE_DN`
 
-This environment variable sets the base domain name for LDAP. Default value is `dc=dcm4che,dc=org`.
+Base domain name for LDAP (optional, default is `dc=dcm4che,dc=org`).
 
 #### `LDAP_ROOTPASS`
 
-This environment variable sets the password for LDAP.
-Only effective if the file specified by `LDAP_ROOTPASS_FILE` does not exist. Default value is `secret`.
+Password to use to authenticate to LDAP (optional, default is `secret`).
 
 #### `LDAP_ROOTPASS_FILE`
 
-Path to file containing the password for LDAP.
-If the file does not exist, it will be created containing the password specified by `LDAP_ROOTPASS`. 
-Default value is `/tmp/ldap_rootpass`.
+Password to use to authenticate to LDAP via file input (alternative to `LDAP_ROOTPASS`).
 
 #### `LDAP_DISABLE_HOSTNAME_VERIFICATION`
 
 Indicates to disable the verification of the hostname of the certificate of the LDAP server,
-if using TLS (`LDAP_URL=ldaps://<host>:<port>`). Default value is `true`.
-
-#### `POSTGRES_HOST`
-
-This environment variable sets the host name for POSTGRES. Default value is `db`.
-
-#### `POSTGRES_PORT`
-
-This environment variable sets the port for POSTGRES. Default value is `5432`.
-
-#### `POSTGRES_DB`
-
-This environment variable defines the name for the default database. Default value is `keycloakdb`. 
-
-#### `POSTGRES_USER`
-
-This environment variable used in conjunction with POSTGRES_PASSWORD is the user with superuser power and its password. 
-Default value is `keycloak`. 
-
-#### `POSTGRES_PASSWORD`
-
-This environment variable is the password for PostgreSQL. 
-Only effective if the file specified by `POSTGRES_PASSWORD_FILE` does not exist. Default value is `keycloak`.
-
-#### `POSTGRES_PASSWORD_FILE`
-
-Path to file containing the password for PostgreSQL.
-If the file does not exist, it will be created containing the password specified by `POSTGRES_PASSWORD`. 
-Default value is `/tmp/postgres_password`.
-
-#### `WILDFLY_KEYCLOAKDS_MAX_POOL_SIZE`
-
-This environment variable sets the maximum pool size allowed for the KeycloakDS datasource in the Wildfly configuration.
-Default value is `50`.
+if using TLS (`LDAP_URL=ldaps://<host>:<port>`) (optional, default is `true`).
 
 #### `KEYCLOAK_DEVICE_NAME`
 
-This is the name of `keycloak` device that is configured in LDAP. Default value is `keycloak`
+Device name to lookup in LDAP for Audit Logging configuration (optional, default is `keycloak`).
+
+#### `KEYCLOAK_USER`
+
+By default there is no admin user created so you won't be able to login to the admin console of the Keycloak master
+realm. To create an admin account you may use environment variables `KEYCLOAK_USER` and `KEYCLOAK_PASSWORD` to pass in
+an initial username and password.
+
+You can also create an account on an already running container by running:
+```
+$ docker exec <CONTAINER> add-user-keycloak.sh -u <USERNAME> -p <PASSWORD>
+```
+
+Then restarting the container:
+```
+$ docker restart <CONTAINER>
+```
+
+#### `KEYCLOAK_PASSWORD`
+
+User's password to use to authenticate to the Keycloak master realm.
+
+#### `KEYCLOAK_PASSWORD_FILE`
+
+User's password to use to authenticate to the Keycloak master realm via file input (alternative to KEYCLOAK_PASSWORD).
+
+#### `KEYCLOAK_IMPORT`
+
+Path to JSON file with ([previous exported](https://www.keycloak.org/docs/latest/server_admin/index.html#_export_import))
+realm configuration to be imported on startup, if such realm does not already exists. Default is
+`"/opt/keycloak/standalone/configuration/dcm4che-realm.json"`, provided by the docker image, customizable by
+environment variables: 
+
+##### `REALM_NAME`
+
+Realm name (default is `dcm4che`). 
+
+##### `SSL_REQUIRED`
+
+Defining the SSL/HTTPS requirements for interacting with the realm:
+- `none` - HTTPS is not required for any client IP address
+- `external` - private IP addresses can access without HTTPS
+- `all` - HTTPS is required for all IP addresses
+
+(default is `external`).
+
+##### `VALIDATE_PASSWORD_POLICY`
+
+Indicates if Keycloak should validate the password with the realm password policy before updating it
+(default value is `false`).
 
 #### `HTTP_PORT`
 
-This environment variable sets the Http port of Wildfly. Default value is `8080`.
+HTTP port of Keycloak (optional, default is `8080`).
 
 #### `HTTPS_PORT`
 
-This environment variable sets the Https port of Wildfly. Default value is `8443`.
+HTTPS port of Wildfly (optional, default is `8443`).
 
 #### `MANAGEMENT_HTTP_PORT`
 
-This environment variable sets the Management Http port of Wildfly. Default value is `9990`.
+HTTP port of Wildfly Administration Console (optional, default is `9990`).
 
 #### `MANAGEMENT_HTTPS_PORT`
 
-This environment variable sets the Management Https port of Wildfly. Default value is `9993`.
+HTTPS port of Wildfly Administration Console (optional, default is `9993`).
 
 #### `WILDFLY_ADMIN_USER`
 
-This environment variable sets the user name for accessing the Wildfly Administration Console.
-Default value is `admin`.
-
-#### `KEYCLOAK_ADMIN_USER`
-
-This environment variable sets the admin user name for Keycloak master realm. If not specified, no admin user 
-for the Keycloak master realm will be created.
-
-#### `KEYCLOAK_ADMIN_PASSWORD`
-
-This environment variable sets the password for the `KEYCLOAK_ADMIN_USER`.
-Only effective if `KEYCLOAK_ADMIN_USER` is set and the file specified by `KEYCLOAK_ADMIN_PASSWORD_FILE` does not exist.
-
-#### `KEYCLOAK_ADMIN_PASSWORD_FILE`
-
-Path to file containing the password for the `KEYCLOAK_ADMIN_USER`. Only effective if `KEYCLOAK_ADMIN_USER` is set.
-If the file does not exist and if `KEYCLOAK_ADMIN_PASSWORD` is set, it will be created containing the password
-specified by `KEYSTORE_PASSWORD`.
-Default value is `/tmp/keycloak_admin_password`.
+User to authenticate to the Wildfly Administration Console (optional, default is `admin`).
 
 #### `SUPER_USER_ROLE`
 
-This environment variable sets the user role to identify super users, which have unrestricted access to all UI functions
-of the Archive, bypassing the verification of user permissions. Login/Logout of such users will emit an [Audit Message
-for Security Alert](http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.11) with EventTypeCode
-`(110127,DCM,"Emergency Override Started")`/`(110138,DCM,"Emergency Override Stopped")`. Default value is `admin`.
+User role to identify super users, which have unrestricted access to all UI functions of the Archive. Login/Logout of
+such users will emit an [Audit Message for Security Alert](http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.11)
+with _Event Type Code_: `(110127,DCM,"Emergency Override Started")`/`(110138,DCM,"Emergency Override Stopped")`.
+Optional, default is `admin`.
 
 #### `KEYSTORE`
 
-This environment variable sets the keystore used in ssl server identities in Wildfly configuration. Default value is
-`/opt/keycloak/standalone/configuration/keycloak/key.jks`.
+Path to keystore file with private key and certificate for HTTPS (default is
+`/opt/keycloak/standalone/configuration/keystore/key.jks`, with sample key + certificate:
+```
+Subject    - CN=PACS_J4C,O=J4CARE,C=AT
+Issuer     - CN=IHE Europe CA, O=IHE Europe, C=FR
+Valid From - Sun Apr 02 06:38:46 UTC 2017
+Valid To   - Fri Apr 02 06:38:46 UTC 2027
+MD5 : 7a:b3:f7:5d:cf:6e:84:34:be:5a:7a:12:95:fa:46:76
+SHA1 : a9:36:b3:b4:60:63:22:9e:f4:ae:41:d3:3b:97:ca:be:9b:a9:32:e9
+```
+provided by the docker image only for testing purpose).
 
 #### `KEYSTORE_PASSWORD`
 
-This environment variables sets the password of the keystore used in ssl server identities in Wildfly configuration.
-Only effective if the file specified by `KEYSTORE_PASSWORD_FILE` does not exist. Default value is `secret`.
+Password used to protect the integrity of the keystore specified by `KEYSTORE` (default is `secret`).
 
 #### `KEYSTORE_PASSWORD_FILE`
 
-Path to file containing the password of the keystore used in ssl server identities in Wildfly configuration.
-If the file does not exist, it will be created containing the password specified by `KEYSTORE_PASSWORD`. 
-Default value is `/tmp/keystore_password`.
+Password used to protect the integrity of the keystore specified by `KEYSTORE` via file input
+(alternative to `KEYSTORE_PASSWORD`).
 
 #### `KEY_PASSWORD`
 
-This environment variables sets the password of the key used in ssl server identities in Wildfly configuration.
-Only effective if the file specified by `KEY_PASSWORD_FILE` does not exist. Default value is `secret`.
+Password used to protect the private key in the keystore specified by `KEYSTORE`
+(default is value of `KEYSTORE_PASSWORD`).
 
 #### `KEY_PASSWORD_FILE`
 
-Path to file containing the password of the key used in ssl server identities in Wildfly configuration.
-If the file does not exist, it will be created containing the password specified by `KEY_PASSWORD`. 
-Default value is `/tmp/key_password`.
+Password used to protect the private key in the keystore specified by `KEYSTORE` via file input
+(alternative to `KEY_PASSWORD`).
 
 #### `KEYSTORE_TYPE`
 
-This environment variable sets the type of keystore that is used above. Default value is `JKS`.
+Type (`JKS` or `PKCS12`) of the keystore specified by `KEYSTORE` (default is `JKS`).
 
 #### `TRUSTSTORE`
 
-This environment variable sets the truststore which will be used to verify archive's certificate and/or keycloak-proxy's certificate 
-in Https communication. Default value is `/opt/keycloak/standalone/configuration/keycloak/cacerts.jks`.
+Path to keystore file with trusted certificates for HTTPS (default is
+`/opt/keycloak/standalone/configuration/keystore/cacerts.jks`, with sample CA certificate:
+```
+Subject    - CN=IHE Europe CA,O=IHE Europe,C=FR
+Issuer     - CN=IHE Europe CA, O=IHE Europe, C=FR
+Valid From - Fri Sep 28 11:19:29 UTC 2012
+Valid To   - Wed Sep 28 11:19:29 UTC 2022
+MD5 : 64:b6:1b:0f:8d:84:17:da:23:e4:e5:1c:56:ba:06:5d
+SHA1 : 54:e0:10:c6:4a:fe:2c:aa:20:3f:50:95:45:82:cb:53:55:6b:07:7f
+```
+provided by the docker image only for testing purpose).
 
 #### `TRUSTSTORE_PASSWORD`
 
-This environment variable sets the password of the above truststore.
-Only effective if the file specified by `TRUSTSTORE_PASSWORD_FILE` does not exist. Default value is `secret`.
+Password used to protect the integrity of the keystore specified by `TRUSTSTORE` (optional, default is `secret`).
 
 #### `TRUSTSTORE_PASSWORD_FILE`
 
-Path to file containing the password of the above truststore.
-If the file does not exist, it will be created containing the password specified by `TRUSTSTORE_PASSWORD`. 
-Default value is `/tmp/truststore_password`.
-
-#### `SSL_REQUIRED`
-
-This environment variable defines the SSL/HTTPS requirements for interacting with the realm. Default value is `external`.
-Values which are accepted are : `external`, `none` or `all`.
+Password used to protect the integrity of the keystore specified by `TRUSTSTORE` via file input
+(alternative to `TRUSTSTORE_PASSWORD`).
 
 #### `HOSTNAME_VERIFICATION_POLICY`
 
@@ -190,27 +189,72 @@ Accepted values are:
 
 Default value is `ANY`.
 
-#### `VALIDATE_PASSWORD_POLICY`
+#### `JAVA_OPTS`
 
-Indicates if Keycloak should validate the password with the realm password policy before updating it. Default value is `false`.
+Java VM options (optional, default is `"-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"`).
 
-#### `REALM_NAME`
+### [Logstash/GELF Logger](https://logging.paluch.biz/) configuration:
 
-This is the name of the realm configured in Keycloak for securing archive UI and RESTful services. Default value is `dcm4che`. 
+#### `LOGSTASH_HOST`
 
-#### `SYSLOG_HOST`
-
-This environment variable is the host name of logstash container used in wildfly configuration. Default value is `logstash`.
+Hostname/IP-Address of the Logstash host. Required for emitting system logs to [Logstash](https://www.elastic.co/products/logstash).
 
 #### `GELF_FACILITY`
 
-This environment variable sets the facility name needed by GELF logging used in wildfly configuration. Default value is `dcm4chee-arc`.
+Name of the Facility (optional, default is `keycloak`).
 
 #### `GELF_LEVEL`
 
-This environment variable sets the level of GELF logging used in wildfly configuration. Default value is `WARN`.
+Log-Level threshold (optional, default is `WARN`).
 
-#### `JAVA_OPTS`
+### PostgreSQL database connection configuration:
 
-This environment variable is used to set the JAVA_OPTS during archive startup. Default value is 
-`"-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"`
+#### `KEYCLOAK_DB_HOST`
+
+Hostname/IP-Address of the PostgreSQL host. Required for using external PostgreSQL database to persist data.
+If absent, embedded Java-based relational database H2 will be used to persist data.
+
+#### `KEYCLOAK_DB_PORT`
+             
+Port of the PostgreSQL host (optional, default is `5432`)
+
+#### `KEYCLOAK_DB_DATABASE`
+                 
+Name of the database to use (optional, default is `keycloak`).
+
+#### `KEYCLOAK_DB_USER`
+             
+User to authenticate to PostgreSQL (optional, default is `keycloak`).
+
+#### `KEYCLOAK_DB_USER_FILE`
+                  
+User to authenticate to PostgreSQL via file input (alternative to `KEYCLOAK_DB_USER`).
+
+#### `KEYCLOAK_DB_PASSWORD`
+
+User's password to use to authenticate to PostgreSQL (optional, default is `keycloak`).
+
+#### `KEYCLOAK_DB_PASSWORD_FILE`
+                      
+User's password to use to authenticate to PostgreSQL via file input (alternative to `DB_PASSWORD`).
+
+#### `KEYCLOAK_DB_JDBC_PARAMS`
+                      
+Optional JDBC [Connection Parameters](https://jdbc.postgresql.org/documentation/head/connect.html) (e.g.: `connectTimeout=30`).
+
+### [Cluster TCPPING configuration](https://www.keycloak.org/2019/04/keycloak-cluster-setup.html):
+
+Requires use of external PostgreSQL database specified by `KEYCLOAK_DB_HOST` to persist data.
+
+#### `JGROUPS_TCP_PORT`
+
+JGroups TCP stack port (optional, default is `7600`).
+
+#### `JGROUPS_DISCOVERY_EXTERNAL_IP`
+
+IP address of this host - must be accessible by the other Keycloak instances.
+
+#### `JGROUPS_DISCOVERY_INITIAL_HOSTS`
+
+IP address and port of all hosts (e.g.: `"172.21.48.4[7600],172.21.48.39[7600]"`)
+

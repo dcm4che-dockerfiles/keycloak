@@ -4,73 +4,86 @@ set -e
 
 if [ "$1" = 'standalone.sh' ]; then
 
-    if [ -n $LDAP_ROOTPASS_FILE -a -f $LDAP_ROOTPASS_FILE ]; then
-        LDAP_ROOTPASS=`cat $LDAP_ROOTPASS_FILE`
-    else
-        echo $LDAP_ROOTPASS > $LDAP_ROOTPASS_FILE
-    fi
+    # usage: file_env VAR [DEFAULT]
+    #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
+    # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
+    #  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
+    file_env() {
+        local var="$1"
+        local fileVar="${var}_FILE"
+        local def="${2:-}"
+        if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
+            echo >&2 "error: both $var and $fileVar are set (but are exclusive)"
+            exit 1
+        fi
+        local val="$def"
+        if [ "${!var:-}" ]; then
+            val="${!var}"
+        elif [ "${!fileVar:-}" ]; then
+            val="$(< "${!fileVar}")"
+        fi
+        export "$var"="$val"
+        unset "$fileVar"
+    }
 
-    if [ -n $POSTGRES_PASSWORD_FILE -a -f $POSTGRES_PASSWORD_FILE ]; then
-        POSTGRES_PASSWORD=`cat $POSTGRES_PASSWORD_FILE`
-    else
-        echo $POSTGRES_PASSWORD > $POSTGRES_PASSWORD_FILE
-    fi
+    file_env 'LDAP_ROOTPASS' 'secret'
+    file_env 'KEYCLOAK_DB_USER' 'keycloak'
+    file_env 'KEYCLOAK_DB_PASSWORD' 'keycloak'
+    file_env 'KEYCLOAK_USER'
+    file_env 'KEYCLOAK_PASSWORD'
+    file_env 'KEYSTORE_PASSWORD' 'secret'
+    file_env 'KEY_PASSWORD' "${KEYSTORE_PASSWORD}"
+    file_env 'TRUSTSTORE_PASSWORD' 'secret'
 
-    if [ -n $KEYCLOAK_ADMIN_PASSWORD_FILE -a -f $KEYCLOAK_ADMIN_PASSWORD_FILE ]; then
-        KEYCLOAK_ADMIN_PASSWORD=`cat $KEYCLOAK_ADMIN_PASSWORD_FILE`
-    elif [ -n "$KEYCLOAK_ADMIN_PASSWORD" ]; then
-        echo $KEYCLOAK_ADMIN_PASSWORD > $KEYCLOAK_ADMIN_PASSWORD_FILE
-    fi
-
-    if [ -n $KEYSTORE_PASSWORD_FILE -a -f $KEYSTORE_PASSWORD_FILE ]; then
-        KEYSTORE_PASSWORD=`cat $KEYSTORE_PASSWORD_FILE`
-    else
-        echo $KEYSTORE_PASSWORD > $KEYSTORE_PASSWORD_FILE
-    fi
-
-    if [ -n $KEY_PASSWORD_FILE -a -f $KEY_PASSWORD_FILE ]; then
-        KEY_PASSWORD=`cat $KEY_PASSWORD_FILE`
-    else
-        echo $KEY_PASSWORD > $KEY_PASSWORD_FILE
-    fi
-
-    if [ -n $TRUSTSTORE_PASSWORD_FILE -a -f $TRUSTSTORE_PASSWORD_FILE ]; then
-        TRUSTSTORE_PASSWORD=`cat $TRUSTSTORE_PASSWORD_FILE`
-    else
-        echo $TRUSTSTORE_PASSWORD > $TRUSTSTORE_PASSWORD_FILE
-    fi
+    # Append '?' in the beginning of the string if KEYCLOAK_DB_JDBC_PARAMS value isn't empty
+    KEYCLOAK_DB_JDBC_PARAMS=$(echo ${KEYCLOAK_DB_JDBC_PARAMS} | sed '/^$/! s/^/?/')
 
     if [ ! -d $JBOSS_HOME/standalone/configuration ]; then
         cp -r /docker-entrypoint.d/deployments $JBOSS_HOME/standalone
         cp -r /docker-entrypoint.d/configuration $JBOSS_HOME/standalone
-        sed -e "s%\${env.REALM_NAME}%${REALM_NAME}%" \
+        sed -e "s%\${env.REALM_NAME}%${REALM_NAME:-dcm4che}%" \
             -e "s%\${env.LDAP_BASE_DN}%${LDAP_BASE_DN}%" \
             -e "s%\${env.LDAP_URL}%${LDAP_URL}%" \
             -e "s%\${env.LDAP_ROOTPASS}%${LDAP_ROOTPASS}%" \
-            -e "s%\${env.SSL_REQUIRED}%${SSL_REQUIRED}%" \
-            -e "s%\${env.VALIDATE_PASSWORD_POLICY}%${VALIDATE_PASSWORD_POLICY}%" \
+            -e "s%\${env.SSL_REQUIRED}%${SSL_REQUIRED:-external}%" \
+            -e "s%\${env.VALIDATE_PASSWORD_POLICY}%${VALIDATE_PASSWORD_POLICY:-false}%" \
             -i $JBOSS_HOME/standalone/configuration/dcm4che-realm.json
-        if [ -n "$KEYCLOAK_ADMIN_USER" -a -n "$KEYCLOAK_ADMIN_PASSWORD" ]; then
-            $JBOSS_HOME/bin/add-user-keycloak.sh -r master -u $KEYCLOAK_ADMIN_USER -p $KEYCLOAK_ADMIN_PASSWORD
+        if [ $KEYCLOAK_USER ] && [ $KEYCLOAK_PASSWORD ]; then
+            $JBOSS_HOME/bin/add-user-keycloak.sh -u $KEYCLOAK_USER -p $KEYCLOAK_PASSWORD
         fi
         chown -R keycloak:keycloak $JBOSS_HOME/standalone
     fi
 
     if [ ! -f $JAVA_HOME/lib/security/cacerts.done ]; then
         touch $JAVA_HOME/lib/security/cacerts.done
-        if [ -n "$TRUSTSTORE" -a -n "$TRUSTSTORE_PASSWORD" ]; then
+        if [ $TRUSTSTORE ]; then
             keytool -importkeystore \
                 -srckeystore $TRUSTSTORE -srcstorepass $TRUSTSTORE_PASSWORD \
                 -destkeystore $JAVA_HOME/lib/security/cacerts -deststorepass changeit
         fi
     fi
 
+    if [ $KEYCLOAK_DB_HOST ]; then
+        if [ $LOGSTASH_HOST ]; then
+            SERVER_CONFIG=keycloak-logstash-psql.xml
+        else
+            SERVER_CONFIG=keycloak-psql.xml
+        fi
+    else
+        if [ $LOGSTASH_HOST ]; then
+            SERVER_CONFIG=keycloak-logstash.xml
+        else
+            SERVER_CONFIG=keycloak.xml
+        fi
+    fi
+    BIND="-b 0.0.0.0 -bmanagement 0.0.0.0 -bprivate $(hostname -i)"
+
     for c in $KEYCLOAK_WAIT_FOR; do
         echo -n "Waiting for $c ... "
-        while ! nc -w 1 -z ${c/:/ }; do sleep 0.1; done
+        while ! nc -w 1 -z ${c/:/ }; do sleep 1; done
         echo "done"
     done
-    set -- gosu keycloak "$@"
+    set -- gosu keycloak "$@" -c $SERVER_CONFIG $BIND -Dkeycloak.import=$KEYCLOAK_IMPORT
     echo "Starting Keycloak $KEYCLOAK_VERSION"
 fi
 
