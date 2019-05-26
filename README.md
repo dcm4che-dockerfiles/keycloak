@@ -207,6 +207,14 @@ Name of the Facility (optional, default is `keycloak`).
 
 Log-Level threshold (optional, default is `WARN`).
 
+#### `GELF_EXTRACT_STACK_TRACE`
+
+Indicates if the Stack-Trace shall be sent in the StackTrace field (optional, default is `true`).
+
+#### `GELF_FILTER_STACK_TRACE`
+
+Indicates if Stack-Trace filtering shall be performed (optional, default is `true`).
+
 ### PostgreSQL database connection configuration:
 
 #### `KEYCLOAK_DB_HOST`

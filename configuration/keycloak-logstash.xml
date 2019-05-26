@@ -104,6 +104,8 @@
                 <properties>
                     <property name="host" value="${env.LOGSTASH_HOST:logstash}" />
                     <property name="facility" value="${env.GELF_FACILITY:keycloak}" />
+                    <property name="extractStackTrace" value="${env.GELF_EXTRACT_STACK_TRACE:true}" />
+                    <property name="filterStackTrace" value="${env.GELF_FILTER_STACK_TRACE:true}" />
                 </properties>
             </custom-handler>
             <logger category="com.arjuna">
