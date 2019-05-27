@@ -42,7 +42,7 @@ services:
       HTTPS_PORT: 8843
       MANAGEMENT_HTTP_PORT: 8990
       MANAGEMENT_HTTPS_PORT: 8993
-      LDAP_URL: ldaps://ldap:636
+      LDAP_URL: ldaps://gunter-nb:636
       KEYCLOAK_WAIT_FOR: ldap:636 keycloak-db:5432
     depends_on:
       - ldap

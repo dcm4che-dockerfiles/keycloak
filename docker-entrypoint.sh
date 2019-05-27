@@ -76,7 +76,8 @@ if [ "$1" = 'standalone.sh' ]; then
             SERVER_CONFIG=keycloak.xml
         fi
     fi
-    BIND="-b 0.0.0.0 -bmanagement 0.0.0.0 -bprivate $(hostname -i)"
+    BIND_IP=$(hostname -i)
+    BIND="-b $BIND_IP -bmanagement $BIND_IP -bprivate $BIND_IP"
 
     for c in $KEYCLOAK_WAIT_FOR; do
         echo -n "Waiting for $c ... "
