@@ -59,6 +59,10 @@ Then restarting the container:
 $ docker restart <CONTAINER>
 ```
 
+#### `KEYCLOAK_USER_FILE`
+
+Keycloak admin user via file input (alternative to KEYCLOAK_USER).
+
 #### `KEYCLOAK_PASSWORD`
 
 User's password to use to authenticate to the Keycloak master realm.
