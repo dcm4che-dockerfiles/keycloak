@@ -40,7 +40,7 @@ RUN cd $HOME \
     && curl -fo modules/org/postgresql/main/postgresql-42.2.5.jar https://jdbc.postgresql.org/download/postgresql-42.2.5.jar \
     && chown -R keycloak:keycloak $JBOSS_HOME
 
-COPY docker-entrypoint.sh /
+COPY docker-entrypoint.sh setenv.sh /
 COPY configuration /docker-entrypoint.d/configuration
 COPY themes $JBOSS_HOME/themes
 
