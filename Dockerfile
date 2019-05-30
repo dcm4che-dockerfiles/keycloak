@@ -48,8 +48,7 @@ ENV LDAP_URL=ldap://ldap:389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
     KEYSTORE=/opt/keycloak/standalone/configuration/keystores/key.jks \
     TRUSTSTORE=/opt/keycloak/standalone/configuration/keystores/cacerts.jks \
-    KEYCLOAK_IMPORT=/opt/keycloak/standalone/configuration/dcm4che-realm.json \
-    JAVA_OPTS="-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
+    KEYCLOAK_IMPORT=/opt/keycloak/standalone/configuration/dcm4che-realm.json
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
 ENV LAUNCH_JBOSS_IN_BACKGROUND true

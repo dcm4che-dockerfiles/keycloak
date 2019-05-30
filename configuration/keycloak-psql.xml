@@ -667,13 +667,13 @@
         </interface>
     </interfaces>
     <socket-binding-group name="standard-sockets" default-interface="public" port-offset="${jboss.socket.binding.port-offset:0}">
-        <socket-binding name="management-http" interface="management" port="${env.MANAGEMENT_HTTP_PORT:9990}"/>
-        <socket-binding name="management-https" interface="management" port="${env.MANAGEMENT_HTTPS_PORT:9993}"/>
+        <socket-binding name="management-http" interface="management" port="${jboss.management.http.port:9990}"/>
+        <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9993}"/>
         <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>
-        <socket-binding name="http" port="${env.HTTP_PORT:8080}"/>
-        <socket-binding name="https" port="${env.HTTPS_PORT:8443}"/>
+        <socket-binding name="http" port="${jboss.http.port:8080}"/>
+        <socket-binding name="https" port="${jboss.https.port:8443}"/>
         <socket-binding name="jgroups-mping" interface="private" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45700"/>
-        <socket-binding name="jgroups-tcp" interface="private" port="${env.JGROUPS_TCP_PORT:7600}"/>
+        <socket-binding name="jgroups-tcp" interface="private" port="${jboss.jgroups.tcp.port:7600}"/>
         <socket-binding name="jgroups-udp" interface="private" port="55200" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45688"/>
         <socket-binding name="modcluster" multicast-address="${jboss.modcluster.multicast.address:224.0.1.105}" multicast-port="23364"/>
         <socket-binding name="txn-recovery-environment" port="4712"/>

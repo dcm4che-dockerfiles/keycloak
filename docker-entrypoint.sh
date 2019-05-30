@@ -6,9 +6,6 @@ if [ "$1" = 'standalone.sh' ]; then
 
     . setenv.sh
 
-    # Append '?' in the beginning of the string if KEYCLOAK_DB_JDBC_PARAMS value isn't empty
-    KEYCLOAK_DB_JDBC_PARAMS=$(echo ${KEYCLOAK_DB_JDBC_PARAMS} | sed '/^$/! s/^/?/')
-
     if [ ! -d $JBOSS_HOME/standalone/configuration ]; then
         cp -r /docker-entrypoint.d/deployments $JBOSS_HOME/standalone
         cp -r /docker-entrypoint.d/configuration $JBOSS_HOME/standalone
@@ -34,28 +31,12 @@ if [ "$1" = 'standalone.sh' ]; then
         fi
     fi
 
-    if [ $KEYCLOAK_DB_HOST ]; then
-        if [ $LOGSTASH_HOST ]; then
-            SERVER_CONFIG=keycloak-logstash-psql.xml
-        else
-            SERVER_CONFIG=keycloak-psql.xml
-        fi
-    else
-        if [ $LOGSTASH_HOST ]; then
-            SERVER_CONFIG=keycloak-logstash.xml
-        else
-            SERVER_CONFIG=keycloak.xml
-        fi
-    fi
-    BIND_IP=$(hostname -i)
-    BIND="-b $BIND_IP -bmanagement $BIND_IP -bprivate $BIND_IP"
-
     for c in $KEYCLOAK_WAIT_FOR; do
         echo -n "Waiting for $c ... "
         while ! nc -w 1 -z ${c/:/ }; do sleep 1; done
         echo "done"
     done
-    set -- gosu keycloak "$@" -c $SERVER_CONFIG $BIND -Dkeycloak.import=$KEYCLOAK_IMPORT
+    set -- gosu keycloak "$@" $SYS_PROPS
     echo "Starting Keycloak $KEYCLOAK_VERSION"
 fi
 
