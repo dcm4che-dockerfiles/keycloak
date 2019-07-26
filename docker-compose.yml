@@ -1,7 +1,7 @@
 version: "3"
 services:
   ldap:
-    image: dcm4che/slapd-dcm4chee:2.4.44-17.0
+    image: dcm4che/slapd-dcm4chee:2.4.44-17.1
     environment:
       LDAP_URLS: "ldap:/// ldaps:///"
     ports:
@@ -12,20 +12,21 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /var/local/dcm4chee-arc/ldap:/var/lib/ldap
       - /var/local/dcm4chee-arc/slapd.d:/etc/ldap/slapd.d
-  keycloak-db:
-    image: postgres:11.2
+  mariadb:
+    image: mariadb:10.4
     ports:
-      - "5432:5432"
+      - "3306:3306"
     environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: keycloak
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: keycloak
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/local/dcm4chee-arc/keycloakdb:/var/lib/postgresql/data
+      - /var/local/dcm4chee-arc/keycloakdb:/var/lib/mysql
   keycloak:
-    image: dcm4che/keycloak:6.0.1-17.0
+    image: dcm4che/keycloak:6.0.1-17.1
     ports:
       - "8880:8880"
       - "8843:8843"
@@ -35,7 +36,7 @@ services:
     extra_hosts:
       - "test-ng:192.168.2.145"
     environment:
-      KEYCLOAK_DB_HOST: keycloak-db
+      DB_VENDOR: mariadb
       JGROUPS_DISCOVERY_EXTERNAL_IP: gunter-nb
       JGROUPS_DISCOVERY_INITIAL_HOSTS: "gunter-nb[7600],test-ng[7600]"
       HTTP_PORT: 8880
@@ -43,10 +44,10 @@ services:
       MANAGEMENT_HTTP_PORT: 8990
       MANAGEMENT_HTTPS_PORT: 8993
       LDAP_URL: ldaps://gunter-nb:636
-      KEYCLOAK_WAIT_FOR: ldap:636 keycloak-db:5432
+      KEYCLOAK_WAIT_FOR: ldap:636 mariadb:3306
     depends_on:
       - ldap
-      - keycloak-db
+      - mariadb
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro

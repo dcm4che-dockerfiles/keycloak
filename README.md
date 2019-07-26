@@ -219,36 +219,45 @@ Indicates if the Stack-Trace shall be sent in the StackTrace field (optional, de
 
 Indicates if Stack-Trace filtering shall be performed (optional, default is `true`).
 
-### PostgreSQL database connection configuration:
+### Keycloak Database configuration:
+
+#### `DB_VENDOR`
+
+DB vendor. Supported values are:
+           
+- `h2` for the embedded H2 database,
+- `postgres` for the Postgres database,
+- `mariadb` for the MariaDB database.
+
+(optional, default is `h2`).
 
 #### `KEYCLOAK_DB_HOST`
 
-Hostname/IP-Address of the PostgreSQL host. Required for using external PostgreSQL database to persist data.
-If absent, embedded Java-based relational database H2 will be used to persist data.
+Hostname/IP-Address of the external database (optional, default is `$DB_VENDOR`).
 
 #### `KEYCLOAK_DB_PORT`
              
-Port of the PostgreSQL host (optional, default is `5432`)
+Port of the external database (optional, default is `5432` for Postgres and `3306` for MariaDB).
 
 #### `KEYCLOAK_DB_DATABASE`
                  
-Name of the database to use (optional, default is `keycloak`).
+Name of the external database to use (optional, default is `keycloak`).
 
 #### `KEYCLOAK_DB_USER`
              
-User to authenticate to PostgreSQL (optional, default is `keycloak`).
+User to authenticate to the external database (optional, default is `keycloak`).
 
 #### `KEYCLOAK_DB_USER_FILE`
                   
-User to authenticate to PostgreSQL via file input (alternative to `KEYCLOAK_DB_USER`).
+User to authenticate to the external database via file input (alternative to `KEYCLOAK_DB_USER`).
 
 #### `KEYCLOAK_DB_PASSWORD`
 
-User's password to use to authenticate to PostgreSQL (optional, default is `keycloak`).
+User's password to use to authenticate to the external database (optional, default is `keycloak`).
 
 #### `KEYCLOAK_DB_PASSWORD_FILE`
                       
-User's password to use to authenticate to PostgreSQL via file input (alternative to `DB_PASSWORD`).
+User's password to use to authenticate to the external database via file input (alternative to `DB_PASSWORD`).
 
 #### `KEYCLOAK_DB_JDBC_PARAMS`
                       
@@ -256,7 +265,7 @@ Optional JDBC [Connection Parameters](https://jdbc.postgresql.org/documentation/
 
 ### [Cluster TCPPING configuration](https://www.keycloak.org/2019/04/keycloak-cluster-setup.html):
 
-Requires use of external PostgreSQL database specified by `KEYCLOAK_DB_HOST` to persist data.
+Requires use of external Postgres or MariaDB database to persist data.
 
 #### `JGROUPS_TCP_PORT`
 
