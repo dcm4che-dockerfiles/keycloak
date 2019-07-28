@@ -278,4 +278,3 @@ IP address of this host - must be accessible by the other Keycloak instances.
 #### `JGROUPS_DISCOVERY_INITIAL_HOSTS`
 
 IP address and port of all hosts (e.g.: `"172.21.48.4[7600],172.21.48.39[7600]"`)
-

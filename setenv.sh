@@ -34,25 +34,25 @@ file_env 'TRUSTSTORE_PASSWORD' 'secret'
 # Append '?' in the beginning of the string if KEYCLOAK_DB_JDBC_PARAMS value isn't empty
 KEYCLOAK_DB_JDBC_PARAMS=$(echo ${KEYCLOAK_DB_JDBC_PARAMS} | sed '/^$/! s/^/?/')
 
-if [ $LOGSTASH_HOST ]; then
-	SYS_PROPS="-c keycloak-logstash"
-else
-	SYS_PROPS="-c keycloak"
-fi
-
 case $DB_VENDOR in
 	postgres)
-		SYS_PROPS+="-psql.xml"
+		DB="-psql"
 		;;
 	mariadb)
-		SYS_PROPS+="-mariadb.xml"
-		;;
-	*)
-		SYS_PROPS+=".xml"
+		DB="-mariadb"
 		;;
 esac
 
+if [ -n "$DB" -a -n "$JGROUPS_DISCOVERY_EXTERNAL_IP" -a -n "$JGROUPS_DISCOVERY_INITIAL_HOSTS" ]; then
+	HA="-ha"
+fi
+
+if [ -n "$LOGSTASH_HOST" ]; then
+	LOGSTASH="-logstash"
+fi
+
 BIND_IP=$(hostname -i)
+SYS_PROPS="-c keycloak${HA}${DB}${LOGSTASH}.xml"
 SYS_PROPS+=" -Djboss.bind.address=$BIND_IP"
 SYS_PROPS+=" -Djboss.bind.address.management=$BIND_IP"
 SYS_PROPS+=" -Djboss.bind.address.private=$BIND_IP"

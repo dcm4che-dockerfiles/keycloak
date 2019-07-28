@@ -1,15 +1,33 @@
 version: "3"
 services:
+  mariadb:
+    image: mariadb:10.4
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: keycloak
+    command:
+      - "--log-bin"
+      - "--log-basename=test-ng"
+      - "--server-id=2"
+      - "--replicate-do-db=keycloak"
+      - "--auto_increment_increment=2"
+      - "--auto_increment_offset=2"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/local/dcm4chee-arc/mysql:/var/lib/mysql
   keycloak:
-    image: dockertest-ng.lan.j4care.com/keycloak:6.0.1-17.0
+    image: dcm4che/keycloak:6.0.1-17.1
     ports:
       - "8880:8880"
       - "8843:8843"
       - "8990:8990"
       - "8993:8993"
       - "7600:7600"
-    extra_hosts:
-      - "test-ng:192.168.2.145"
     environment:
       KEYCLOAK_DB_HOST: gunter-nb
       JGROUPS_DISCOVERY_EXTERNAL_IP: test-ng
@@ -22,4 +40,3 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/local/dcm4chee-arc/keycloak2:/opt/keycloak/standalone
