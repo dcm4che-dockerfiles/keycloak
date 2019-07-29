@@ -227,7 +227,7 @@ DB vendor. Supported values are:
            
 - `h2` for the embedded H2 database,
 - `postgres` for the Postgres database,
-- `mariadb` for the MariaDB database.
+- `mysql` for the MySQL and MariaDB database.
 
 (optional, default is `h2`).
 
@@ -265,7 +265,7 @@ Optional JDBC [Connection Parameters](https://jdbc.postgresql.org/documentation/
 
 ### [Cluster TCPPING configuration](https://www.keycloak.org/2019/04/keycloak-cluster-setup.html):
 
-Requires use of external Postgres or MariaDB database to persist data.
+Requires use of external Postgres or MySQL/MariaDB database to persist data.
 
 #### `JGROUPS_TCP_PORT`
 

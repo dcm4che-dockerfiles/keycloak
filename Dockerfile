@@ -37,9 +37,9 @@ RUN cd $HOME \
     && cd $JBOSS_HOME \
     && curl http://maven.dcm4che.org/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}.tar.gz | tar xz \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules/1.0.0/jdbc-jboss-modules-1.0.0-psql.tar.gz | tar xz \
-    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules/1.0.0/jdbc-jboss-modules-1.0.0-mariadb.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules/1.0.0/jdbc-jboss-modules-1.0.0-mysql.tar.gz | tar xz \
     && curl -fo modules/org/postgresql/main/postgresql-42.2.5.jar https://jdbc.postgresql.org/download/postgresql-42.2.5.jar \
-    && curl -fo modules/org/mariadb/main/mariadb-java-client-2.4.2.jar http://downloads.mariadb.com/Connectors/java/connector-java-2.4.2/mariadb-java-client-2.4.2.jar \
+    && curl -fo modules/com/mysql/main/mysql-connector-java-5.1.36-bin.jar https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.36/mysql-connector-java-5.1.36.jar \
     && chown -R keycloak:keycloak $JBOSS_HOME
 
 COPY docker-entrypoint.sh setenv.sh /

@@ -38,8 +38,8 @@ case $DB_VENDOR in
 	postgres)
 		DB="-psql"
 		;;
-	mariadb)
-		DB="-mariadb"
+	mysql)
+		DB="-mysql"
 		;;
 esac
 
