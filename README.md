@@ -237,7 +237,7 @@ Hostname/IP-Address of the external database (optional, default is `$DB_VENDOR`)
 
 #### `KEYCLOAK_DB_PORT`
              
-Port of the external database (optional, default is `5432` for Postgres and `3306` for MariaDB).
+Port of the external database (optional, default is `5432` for Postgres and `3306` for MySQL and MariaDB).
 
 #### `KEYCLOAK_DB_DATABASE`
                  
