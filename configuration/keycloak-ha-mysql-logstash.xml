@@ -1,46 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
-<!--
-  ~ ***** BEGIN LICENSE BLOCK *****
-  ~ Version: MPL 1.1/GPL 2.0/LGPL 2.1
-  ~
-  ~ The contents of this file are subject to the Mozilla Public License Version
-  ~ 1.1 (the "License"); you may not use this file except in compliance with
-  ~ the License. You may obtain a copy of the License at
-  ~ http://www.mozilla.org/MPL/
-  ~
-  ~ Software distributed under the License is distributed on an "AS IS" basis,
-  ~ WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
-  ~ for the specific language governing rights and limitations under the
-  ~ License.
-  ~
-  ~ The Original Code is part of dcm4che, an implementation of DICOM(TM) in
-  ~ Java(TM), hosted at https://github.com/dcm4che.
-  ~
-  ~ The Initial Developer of the Original Code is
-  ~ J4Care.
-  ~ Portions created by the Initial Developer are Copyright (C) 2015-2019
-  ~ the Initial Developer. All Rights Reserved.
-  ~
-  ~ Contributor(s):
-  ~ See @authors listed below
-  ~
-  ~ Alternatively, the contents of this file may be used under the terms of
-  ~ either the GNU General Public License Version 2 or later (the "GPL"), or
-  ~ the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
-  ~ in which case the provisions of the GPL or the LGPL are applicable instead
-  ~ of those above. If you wish to allow use of your version of this file only
-  ~ under the terms of either the GPL or the LGPL, and not to allow others to
-  ~ use your version of this file under the terms of the MPL, indicate your
-  ~ decision by deleting the provisions above and replace them with the notice
-  ~ and other provisions required by the GPL or the LGPL. If you do not delete
-  ~ the provisions above, a recipient may use your version of this file under
-  ~ the terms of any one of the MPL, the GPL or the LGPL.
-  ~
-  ~ ***** END LICENSE BLOCK *****
-  ~
-  -->
-
 <server xmlns="urn:jboss:domain:10.0">
     <extensions>
         <extension module="org.jboss.as.clustering.infinispan"/>
@@ -59,6 +18,7 @@
         <extension module="org.jboss.as.remoting"/>
         <extension module="org.jboss.as.security"/>
         <extension module="org.jboss.as.transactions"/>
+        <extension module="org.jboss.as.weld"/>
         <extension module="org.keycloak.keycloak-server-subsystem"/>
         <extension module="org.wildfly.extension.bean-validation"/>
         <extension module="org.wildfly.extension.core-management"/>
@@ -133,7 +93,7 @@
         </access-control>
     </management>
     <profile>
-        <subsystem xmlns="urn:jboss:domain:logging:6.0">
+        <subsystem xmlns="urn:jboss:domain:logging:7.0">
             <periodic-rotating-file-handler name="FILE" autoflush="true">
                 <formatter>
                     <named-formatter name="PATTERN"/>
@@ -263,7 +223,6 @@
             </timer-service>
             <remote connector-ref="http-remoting-connector" thread-pool-name="default">
                 <channel-creation-options>
-                    <option name="READ_TIMEOUT" value="${prop.remoting-connector.read.timeout:20}" type="xnio"/>
                     <option name="MAX_OUTBOUND_MESSAGES" value="1234" type="remoting"/>
                 </channel-creation-options>
             </remote>
@@ -318,11 +277,16 @@
             </cache-container>
             <cache-container name="web" default-cache="dist" module="org.wildfly.clustering.web.infinispan">
                 <transport lock-timeout="60000"/>
+                <replicated-cache name="sso">
+                    <locking isolation="REPEATABLE_READ"/>
+                    <transaction mode="BATCH"/>
+                </replicated-cache>
                 <distributed-cache name="dist">
                     <locking isolation="REPEATABLE_READ"/>
                     <transaction mode="BATCH"/>
                     <file-store/>
                 </distributed-cache>
+                <distributed-cache name="routing"/>
             </cache-container>
             <cache-container name="ejb" aliases="sfsb" default-cache="dist" module="org.wildfly.clustering.ejb.infinispan">
                 <transport lock-timeout="60000"/>
@@ -366,7 +330,7 @@
             </default-workmanager>
             <cached-connection-manager/>
         </subsystem>
-        <subsystem xmlns="urn:jboss:domain:jgroups:6.0">
+        <subsystem xmlns="urn:jboss:domain:jgroups:7.0">
             <channels default="ee">
                 <channel name="ee" stack="tcp" cluster="ejb"/>
             </channels>
@@ -429,7 +393,7 @@
                 </maximum-set>
             </deployment-permissions>
         </subsystem>
-        <subsystem xmlns="urn:wildfly:elytron:6.0" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
+        <subsystem xmlns="urn:wildfly:elytron:7.0" final-providers="combined-providers" disallowed-providers="OracleUcrypto">
             <providers>
                 <aggregate-providers name="combined-providers">
                     <providers name="elytron"/>
@@ -588,10 +552,11 @@
             <coordinator-environment statistics-enabled="${wildfly.transactions.statistics-enabled:${wildfly.statistics-enabled:false}}"/>
             <object-store path="tx-object-store" relative-to="jboss.server.data.dir"/>
         </subsystem>
+        <subsystem xmlns="urn:jboss:domain:weld:4.0"/>
         <subsystem xmlns="urn:wildfly:microprofile-config-smallrye:1.0"/>
         <subsystem xmlns="urn:wildfly:microprofile-health-smallrye:1.0" security-enabled="false"/>
         <subsystem xmlns="urn:wildfly:microprofile-metrics-smallrye:2.0" security-enabled="false" exposed-subsystems="*" prefix="${wildfly.metrics.prefix:wildfly}"/>
-        <subsystem xmlns="urn:jboss:domain:undertow:8.0" default-server="default-server" default-virtual-host="default-host" default-servlet-container="default" default-security-domain="other" statistics-enabled="${wildfly.undertow.statistics-enabled:${wildfly.statistics-enabled:false}}">
+        <subsystem xmlns="urn:jboss:domain:undertow:9.0" default-server="default-server" default-virtual-host="default-host" default-servlet-container="default" default-security-domain="other" statistics-enabled="${wildfly.undertow.statistics-enabled:${wildfly.statistics-enabled:false}}">
             <buffer-cache name="default"/>
             <server name="default-server">
                 <ajp-listener name="ajp" socket-binding="ajp"/>

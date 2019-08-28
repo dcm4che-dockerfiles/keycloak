@@ -135,6 +135,48 @@
       ]
     },
     {
+      "id": "d2d2b2d2-913c-42f7-bb68-13f0f40b37d1",
+      "name": "microprofile-jwt",
+      "description": "Microprofile - JWT built-in scope",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "id": "dea4d456-6d4d-4210-9f74-59e4a829abe9",
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "user.attribute": "foo",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "groups",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "75d87e37-f4cd-42ca-b7d6-8f23a3d49e33",
+          "name": "upn",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "username",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "upn",
+            "jsonType.label": "String"
+          }
+        }
+      ]
+    },
+    {
       "id": "e984372e-8f0c-4692-915b-1ab83911938f",
       "name": "offline_access",
       "description": "OpenID Connect built-in scope: offline_access",
@@ -509,6 +551,7 @@
   ],
   "defaultOptionalClientScopes": [
     "address",
+    "microprofile-jwt",
     "phone",
     "offline_access"
   ],
@@ -604,7 +647,11 @@
         "providerId": "allowed-client-templates",
         "subType": "anonymous",
         "subComponents": {},
-        "config": {}
+        "config": {
+          "allow-default-scopes": [
+            "true"
+          ]
+        }
       },
       {
         "id": "1658aeba-38f8-48b1-8098-c0469b1b69d8",
@@ -627,7 +674,11 @@
         "providerId": "allowed-client-templates",
         "subType": "authenticated",
         "subComponents": {},
-        "config": {}
+        "config": {
+          "allow-default-scopes": [
+            "true"
+          ]
+        }
       }
     ],
     "org.keycloak.storage.UserStorageProvider": [
@@ -1197,6 +1248,44 @@
       ]
     },
     {
+      "id": "19fd542d-48bb-40a8-8e14-3b3a8883bdfa",
+      "alias": "http challenge",
+      "description": "An authentication flow based on challenge-response HTTP Authentication Schemes",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "no-cookie-redirect",
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "basic-auth",
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "basic-auth-otp",
+          "requirement": "DISABLED",
+          "priority": 30,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "auth-spnego",
+          "requirement": "DISABLED",
+          "priority": 40,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        }
+      ]
+    },
+    {
       "id": "651ec90f-5a75-44cd-8547-b4d1499de495",
       "alias": "registration",
       "description": "registration flow",
@@ -1331,7 +1420,7 @@
       "providerId": "CONFIGURE_TOTP",
       "enabled": true,
       "defaultAction": false,
-      "priority": 0,
+      "priority": 10,
       "config": {}
     },
     {
@@ -1340,7 +1429,7 @@
       "providerId": "terms_and_conditions",
       "enabled": false,
       "defaultAction": false,
-      "priority": 0,
+      "priority": 20,
       "config": {}
     },
     {
@@ -1349,7 +1438,7 @@
       "providerId": "UPDATE_PASSWORD",
       "enabled": true,
       "defaultAction": false,
-      "priority": 0,
+      "priority": 30,
       "config": {}
     },
     {
@@ -1358,7 +1447,7 @@
       "providerId": "UPDATE_PROFILE",
       "enabled": true,
       "defaultAction": false,
-      "priority": 0,
+      "priority": 40,
       "config": {}
     },
     {
@@ -1367,7 +1456,7 @@
       "providerId": "VERIFY_EMAIL",
       "enabled": true,
       "defaultAction": false,
-      "priority": 0,
+      "priority": 50,
       "config": {}
     }
   ],
@@ -1398,6 +1487,6 @@
     "waitIncrementSeconds": "60",
     "offlineSessionMaxLifespanEnabled": "false"
   },
-  "keycloakVersion": "6.0.1",
+  "keycloakVersion": "7.0.0",
   "userManagedAccessAllowed": false
 }
