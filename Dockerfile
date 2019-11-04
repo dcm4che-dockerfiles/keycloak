@@ -1,4 +1,4 @@
-FROM openjdk:11.0.4-jre-stretch
+FROM openjdk:13-buster
 
 # explicitly set user/group IDs
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
@@ -19,9 +19,9 @@ RUN arch="$(dpkg --print-architecture)" \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=7.0.0 \
+ENV KEYCLOAK_VERSION=7.0.1 \
     LOGSTASH_GELF_VERSION=1.13.0 \
-    DCM4CHE_VERSION=5.18.1 \
+    DCM4CHE_VERSION=5.19.1 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
@@ -36,6 +36,14 @@ RUN cd $HOME \
     && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
     && cd $JBOSS_HOME \
     && curl http://maven.dcm4che.org/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}.tar.gz | tar xz \
+       modules/org/dcm4che/audit \
+       modules/org/dcm4che/audit-keycloak \
+       modules/org/dcm4che/conf/api \
+       modules/org/dcm4che/conf/ldap \
+       modules/org/dcm4che/conf/ldap-audit \
+       modules/org/dcm4che/core \
+       modules/org/dcm4che/net \
+       modules/org/dcm4che/net-audit \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules/1.0.0/jdbc-jboss-modules-1.0.0-psql.tar.gz | tar xz \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules/1.0.0/jdbc-jboss-modules-1.0.0-mysql.tar.gz | tar xz \
     && curl -fo modules/org/postgresql/main/postgresql-42.2.5.jar https://jdbc.postgresql.org/download/postgresql-42.2.5.jar \

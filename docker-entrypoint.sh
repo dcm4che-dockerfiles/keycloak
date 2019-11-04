@@ -32,7 +32,7 @@ if [ "$1" = 'standalone.sh' ]; then
     fi
 
     for c in $KEYCLOAK_WAIT_FOR; do
-        echo -n "Waiting for $c ... "
+        echo "Waiting for $c ..."
         while ! nc -w 1 -z ${c/:/ }; do sleep 1; done
         echo "done"
     done
