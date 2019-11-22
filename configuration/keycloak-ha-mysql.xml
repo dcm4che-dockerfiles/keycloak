@@ -140,7 +140,7 @@
                     </security>
                 </datasource>
                 <datasource jndi-name="java:jboss/datasources/KeycloakDS" pool-name="KeycloakDS" enabled="true" use-java-context="true" use-ccm="true">
-                    <connection-url>jdbc:mysql://${env.KEYCLOAK_DB_HOST:mariadb}:${env.KEYCLOAK_DB_PORT:3306}/${env.KEYCLOAK_DB_DATABASE:keycloak}${env.KEYCLOAK_DB_JDBC_PARAMS:}</connection-url>
+                    <connection-url>jdbc:mysql://${env.KEYCLOAK_DB_HOST:mysql}:${env.KEYCLOAK_DB_PORT:3306}/${env.KEYCLOAK_DB_DATABASE:keycloak}${env.KEYCLOAK_DB_JDBC_PARAMS:}</connection-url>
                     <driver>mysql</driver>
                     <security>
                         <user-name>${env.DB_USER:keycloak}</user-name>
