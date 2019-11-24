@@ -225,23 +225,23 @@ Indicates if Stack-Trace filtering shall be performed (optional, default is `tru
 
 DB vendor. Supported values are:
            
-- `h2` for the embedded H2 database,
-- `postgres` for the Postgres database,
-- `mysql` for the MySQL and MariaDB database.
+- `h2` - use embedded H2 database,
+- `postgres` - use external PostgreSQL database,
+- `mysql` - use external MySQL and MariaDB database,
+- `oracle` - use external Oracle database.
 
 (optional, default is `h2`).
 
-#### `KEYCLOAK_DB_HOST`
+#### `KEYCLOAK_DB_CONNECTION_URL`
 
-Hostname/IP-Address of the external database (optional, default is `$DB_VENDOR`).
+JDBC driver connection URL. Not effective with embedded H2 database.
+Optional, default depends on external database:
 
-#### `KEYCLOAK_DB_PORT`
-             
-Port of the external database (optional, default is `5432` for Postgres and `3306` for MySQL and MariaDB).
-
-#### `KEYCLOAK_DB_DATABASE`
-                 
-Name of the external database to use (optional, default is `keycloak`).
+`DB_VENDOR` | default
+-- | --
+`postgres` | `jdbc:postgresql://db:5432/keycloak`
+`mysql` | `jdbc:mysql://db:3306/keycloak?characterEncoding=UTF-8`
+`oracle` | `jdbc:oracle:thin:@db:1521:keycloak`
 
 #### `KEYCLOAK_DB_USER`
              
@@ -258,10 +258,6 @@ User's password to use to authenticate to the external database (optional, defau
 #### `KEYCLOAK_DB_PASSWORD_FILE`
                       
 User's password to use to authenticate to the external database via file input (alternative to `DB_PASSWORD`).
-
-#### `KEYCLOAK_DB_JDBC_PARAMS`
-                      
-Optional JDBC [Connection Parameters](https://jdbc.postgresql.org/documentation/head/connect.html) (e.g.: `connectTimeout=30`).
 
 ### [Cluster TCPPING configuration](https://www.keycloak.org/2019/04/keycloak-cluster-setup.html):
 

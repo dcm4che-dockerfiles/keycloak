@@ -31,15 +31,15 @@ file_env 'KEYSTORE_PASSWORD' 'secret'
 file_env 'KEY_PASSWORD' "${KEYSTORE_PASSWORD}"
 file_env 'TRUSTSTORE_PASSWORD' 'secret'
 
-# Append '?' in the beginning of the string if KEYCLOAK_DB_JDBC_PARAMS value isn't empty
-KEYCLOAK_DB_JDBC_PARAMS=$(echo ${KEYCLOAK_DB_JDBC_PARAMS} | sed '/^$/! s/^/?/')
-
 case $DB_VENDOR in
 	postgres)
 		DB="-psql"
 		;;
 	mysql)
 		DB="-mysql"
+		;;
+	oracle)
+		DB="-oracle"
 		;;
 esac
 

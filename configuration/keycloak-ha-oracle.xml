@@ -1,5 +1,46 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
+<!--
+  ~ ***** BEGIN LICENSE BLOCK *****
+  ~ Version: MPL 1.1/GPL 2.0/LGPL 2.1
+  ~
+  ~ The contents of this file are subject to the Mozilla Public License Version
+  ~ 1.1 (the "License"); you may not use this file except in compliance with
+  ~ the License. You may obtain a copy of the License at
+  ~ http://www.mozilla.org/MPL/
+  ~
+  ~ Software distributed under the License is distributed on an "AS IS" basis,
+  ~ WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+  ~ for the specific language governing rights and limitations under the
+  ~ License.
+  ~
+  ~ The Original Code is part of dcm4che, an implementation of DICOM(TM) in
+  ~ Java(TM), hosted at https://github.com/dcm4che.
+  ~
+  ~ The Initial Developer of the Original Code is
+  ~ J4Care.
+  ~ Portions created by the Initial Developer are Copyright (C) 2015-2019
+  ~ the Initial Developer. All Rights Reserved.
+  ~
+  ~ Contributor(s):
+  ~ See @authors listed below
+  ~
+  ~ Alternatively, the contents of this file may be used under the terms of
+  ~ either the GNU General Public License Version 2 or later (the "GPL"), or
+  ~ the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+  ~ in which case the provisions of the GPL or the LGPL are applicable instead
+  ~ of those above. If you wish to allow use of your version of this file only
+  ~ under the terms of either the GPL or the LGPL, and not to allow others to
+  ~ use your version of this file under the terms of the MPL, indicate your
+  ~ decision by deleting the provisions above and replace them with the notice
+  ~ and other provisions required by the GPL or the LGPL. If you do not delete
+  ~ the provisions above, a recipient may use your version of this file under
+  ~ the terms of any one of the MPL, the GPL or the LGPL.
+  ~
+  ~ ***** END LICENSE BLOCK *****
+  ~
+  -->
+
 <server xmlns="urn:jboss:domain:10.0">
     <extensions>
         <extension module="org.jboss.as.clustering.infinispan"/>
@@ -132,8 +173,8 @@
         <subsystem xmlns="urn:jboss:domain:datasources:5.0">
             <datasources>
                 <datasource jndi-name="java:jboss/datasources/KeycloakDS" pool-name="KeycloakDS" enabled="true" use-java-context="true" use-ccm="true">
-                    <connection-url>${env.KEYCLOAK_DB_CONNECTION_URL:jdbc:postgresql://db:5432/keycloak}</connection-url>
-                    <driver>postgresql</driver>
+                    <connection-url>${env.KEYCLOAK_DB_CONNECTION_URL:jdbc:oracle:thin:@db:1521:keycloak}</connection-url>
+                    <driver>oracle</driver>
                     <pool>
                         <max-pool-size>${env.KEYCLOAK_DB_MAX_POOL_SIZE:20}</max-pool-size>
                     </pool>
@@ -142,18 +183,17 @@
                         <password>${env.KEYCLOAK_DB_PASSWORD:keycloak}</password>
                     </security>
                     <validation>
-                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
-                        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
-                        <background-validation-millis>60000</background-validation-millis>
+                         <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleValidConnectionChecker"></valid-connection-checker>
+                         <stale-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleStaleConnectionChecker"></stale-connection-checker>
+                         <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleExceptionSorter"></exception-sorter>
+                         <background-validation-millis>10000</background-validation-millis>
                     </validation>
                 </datasource>
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
                     </driver>
-                    <driver name="postgresql" module="org.postgresql">
-                        <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
-                    </driver>
+                    <driver name="oracle" module="com.oracle"/>
                 </drivers>
             </datasources>
         </subsystem>

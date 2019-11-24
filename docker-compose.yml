@@ -40,7 +40,7 @@ services:
       - "7600:7600"
     environment:
       DB_VENDOR: mysql
-      KEYCLOAK_DB_HOST: mariadb
+      KEYCLOAK_DB_CONNECTION_URL: jdbc:mysql://maria:3306/keycloak
       JGROUPS_DISCOVERY_EXTERNAL_IP: gunter-nb
       JGROUPS_DISCOVERY_INITIAL_HOSTS: "gunter-nb[7600],test-ng[7600]"
       HTTP_PORT: 8880
