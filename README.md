@@ -243,6 +243,10 @@ Optional, default depends on external database:
 `mysql` | `jdbc:mysql://db:3306/keycloak?characterEncoding=UTF-8`
 `oracle` | `jdbc:oracle:thin:@db:1521:keycloak`
 
+#### `KEYCLOAK_DB_MAX_POOL_SIZE`
+
+Maximum number of pooled DB connections (optional, default is `20`).
+
 #### `KEYCLOAK_DB_USER`
              
 User to authenticate to the external database (optional, default is `keycloak`).
