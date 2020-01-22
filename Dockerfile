@@ -27,11 +27,11 @@ ENV KEYCLOAK_VERSION=8.0.1 \
 RUN cd $HOME \
     && curl -L https://downloads.jboss.org/keycloak/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz | tar xz \
     && mv keycloak-$KEYCLOAK_VERSION $JBOSS_HOME \
-    && curl http://central.maven.org/maven2/biz/paluch/logging/logstash-gelf/$LOGSTASH_GELF_VERSION/logstash-gelf-$LOGSTASH_GELF_VERSION-logging-module.zip -O \
-    && unzip logstash-gelf-$LOGSTASH_GELF_VERSION-logging-module.zip \
-    && mv logstash-gelf-$LOGSTASH_GELF_VERSION/biz $JBOSS_HOME/modules/biz \
-    && rmdir logstash-gelf-$LOGSTASH_GELF_VERSION \
-    && rm logstash-gelf-$LOGSTASH_GELF_VERSION-logging-module.zip \
+    && curl https://repo1.maven.org/maven2/biz/paluch/logging/logstash-gelf/${LOGSTASH_GELF_VERSION}/logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip -O \
+    && unzip logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip \
+    && mv logstash-gelf-${LOGSTASH_GELF_VERSION}/biz $JBOSS_HOME/modules/biz \
+    && rmdir logstash-gelf-${LOGSTASH_GELF_VERSION} \
+    && rm logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip \
     && mkdir /docker-entrypoint.d \
     && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
     && cd $JBOSS_HOME \
