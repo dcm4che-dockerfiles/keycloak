@@ -1054,15 +1054,32 @@
           "autheticatorFlow": false
         },
         {
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": "Handle Existing Account - Alternatives - 0",
+          "userSetupAllowed": false,
+          "autheticatorFlow": true
+        }
+      ]
+    },
+    {
+      "id": "db72ca1b-4120-4c7b-9d12-0e4b24056bb5",
+      "alias": "Handle Existing Account - Alternatives - 0",
+      "description": "Subflow of Handle Existing Account with alternative executions",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
           "authenticator": "idp-email-verification",
           "requirement": "ALTERNATIVE",
-          "priority": 20,
+          "priority": 10,
           "userSetupAllowed": false,
           "autheticatorFlow": false
         },
         {
           "requirement": "ALTERNATIVE",
-          "priority": 30,
+          "priority": 20,
           "flowAlias": "Verify Existing Account by Re-authentication",
           "userSetupAllowed": false,
           "autheticatorFlow": true
@@ -1268,16 +1285,33 @@
           "autheticatorFlow": false
         },
         {
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": "first broker login - Alternatives - 0",
+          "userSetupAllowed": false,
+          "autheticatorFlow": true
+        }
+      ]
+    },
+    {
+      "id": "7b4f3cf3-6cd3-4ebb-b71a-3c325e9076d7",
+      "alias": "first broker login - Alternatives - 0",
+      "description": "Subflow of first broker login with alternative executions",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
           "authenticatorConfig": "create unique user config",
           "authenticator": "idp-create-user-if-unique",
           "requirement": "ALTERNATIVE",
-          "priority": 20,
+          "priority": 10,
           "userSetupAllowed": false,
           "autheticatorFlow": false
         },
         {
           "requirement": "ALTERNATIVE",
-          "priority": 30,
+          "priority": 20,
           "flowAlias": "Handle Existing Account",
           "userSetupAllowed": false,
           "autheticatorFlow": true
@@ -1605,6 +1639,6 @@
     "waitIncrementSeconds": "60",
     "offlineSessionMaxLifespanEnabled": "false"
   },
-  "keycloakVersion": "8.0.1",
+  "keycloakVersion": "8.0.2",
   "userManagedAccessAllowed": false
 }
