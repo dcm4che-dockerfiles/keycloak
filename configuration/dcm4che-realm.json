@@ -65,6 +65,18 @@
   "webAuthnPolicyCreateTimeout": 0,
   "webAuthnPolicyAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyAcceptableAaguids": [],
+  "webAuthnPolicyPasswordlessRpEntityName": "keycloak",
+  "webAuthnPolicyPasswordlessSignatureAlgorithms": [
+    "ES256"
+  ],
+  "webAuthnPolicyPasswordlessRpId": "",
+  "webAuthnPolicyPasswordlessAttestationConveyancePreference": "not specified",
+  "webAuthnPolicyPasswordlessAuthenticatorAttachment": "not specified",
+  "webAuthnPolicyPasswordlessRequireResidentKey": "not specified",
+  "webAuthnPolicyPasswordlessUserVerificationRequirement": "not specified",
+  "webAuthnPolicyPasswordlessCreateTimeout": 0,
+  "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
+  "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -596,14 +608,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
-            "saml-role-list-mapper",
             "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-address-mapper",
             "oidc-full-name-mapper",
             "saml-user-property-mapper",
-            "saml-user-attribute-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-usermodel-property-mapper"
+            "saml-role-list-mapper",
+            "saml-user-attribute-mapper"
           ]
         }
       },
@@ -631,14 +643,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
+            "saml-role-list-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
             "oidc-address-mapper",
             "oidc-usermodel-attribute-mapper",
-            "saml-role-list-mapper",
             "oidc-full-name-mapper",
-            "saml-user-property-mapper",
             "oidc-usermodel-property-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
-            "saml-user-attribute-mapper"
+            "saml-user-attribute-mapper",
+            "saml-user-property-mapper"
           ]
         }
       },
@@ -782,10 +794,10 @@
                 "is.mandatory.in.ldap": [
                   "false"
                 ],
-                "read.only": [
+                "always.read.value.from.ldap": [
                   "false"
                 ],
-                "always.read.value.from.ldap": [
+                "read.only": [
                   "false"
                 ],
                 "user.model.attribute": [
@@ -805,11 +817,11 @@
                 "is.mandatory.in.ldap": [
                   "true"
                 ],
-                "read.only": [
-                  "false"
-                ],
                 "always.read.value.from.ldap": [
                   "true"
+                ],
+                "read.only": [
+                  "false"
                 ],
                 "user.model.attribute": [
                   "firstName"
@@ -869,11 +881,11 @@
                 "roles.dn": [
                   "ou=realm-management,${env.LDAP_BASE_DN}"
                 ],
-                "membership.ldap.attribute": [
-                  "member"
-                ],
                 "membership.user.ldap.attribute": [
                   "uid"
+                ],
+                "membership.ldap.attribute": [
+                  "member"
                 ],
                 "role.name.ldap.attribute": [
                   "cn"
@@ -881,11 +893,11 @@
                 "use.realm.roles.mapping": [
                   "false"
                 ],
-                "client.id": [
-                  "realm-management"
-                ],
                 "role.object.classes": [
                   "groupOfNames"
+                ],
+                "client.id": [
+                  "realm-management"
                 ]
               }
             },
@@ -901,10 +913,10 @@
                 "is.mandatory.in.ldap": [
                   "true"
                 ],
-                "read.only": [
+                "always.read.value.from.ldap": [
                   "false"
                 ],
-                "always.read.value.from.ldap": [
+                "read.only": [
                   "false"
                 ],
                 "user.model.attribute": [
@@ -936,17 +948,17 @@
           "importEnabled": [
             "true"
           ],
-          "changedSyncPeriod": [
-            "-1"
-          ],
-          "usernameLDAPAttribute": [
-            "uid"
-          ],
           "bindDn": [
             "cn=admin,${env.LDAP_BASE_DN}"
           ],
           "bindCredential": [
             "${env.LDAP_ROOTPASS}"
+          ],
+          "usernameLDAPAttribute": [
+            "uid"
+          ],
+          "changedSyncPeriod": [
+            "-1"
           ],
           "lastSync": [
             "1502608592"
@@ -957,11 +969,11 @@
           "uuidLDAPAttribute": [
             "entryUUID"
           ],
-          "connectionUrl": [
-            "${env.LDAP_URL}"
-          ],
           "allowKerberosAuthentication": [
             "false"
+          ],
+          "connectionUrl": [
+            "${env.LDAP_URL}"
           ],
           "syncRegistrations": [
             "true"
@@ -1612,14 +1624,21 @@
   "attributes": {
     "webAuthnPolicyAuthenticatorAttachment": "not specified",
     "_browser_header.xRobotsTag": "none",
+    "webAuthnPolicyAttestationConveyancePreferencePasswordless": "not specified",
+    "webAuthnPolicyRequireResidentKeyPasswordless": "not specified",
+    "webAuthnPolicySignatureAlgorithmsPasswordless": "ES256",
     "webAuthnPolicyRpEntityName": "keycloak",
+    "webAuthnPolicyAvoidSameAuthenticatorRegisterPasswordless": "false",
     "failureFactor": "30",
+    "webAuthnPolicyAuthenticatorAttachmentPasswordless": "not specified",
     "actionTokenGeneratedByUserLifespan": "300",
     "maxDeltaTimeSeconds": "43200",
     "webAuthnPolicySignatureAlgorithms": "ES256",
+    "webAuthnPolicyRpEntityNamePasswordless": "keycloak",
     "offlineSessionMaxLifespan": "5184000",
     "_browser_header.contentSecurityPolicyReportOnly": "",
     "bruteForceProtected": "false",
+    "webAuthnPolicyRpIdPasswordless": "",
     "_browser_header.contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
     "_browser_header.xXSSProtection": "1; mode=block",
     "_browser_header.xFrameOptions": "SAMEORIGIN",
@@ -1633,12 +1652,14 @@
     "webAuthnPolicyAttestationConveyancePreference": "not specified",
     "maxFailureWaitSeconds": "900",
     "minimumQuickLoginWaitSeconds": "60",
+    "webAuthnPolicyCreateTimeoutPasswordless": "0",
     "webAuthnPolicyAvoidSameAuthenticatorRegister": "false",
+    "webAuthnPolicyUserVerificationRequirementPasswordless": "not specified",
     "_browser_header.xContentTypeOptions": "nosniff",
     "actionTokenGeneratedByAdminLifespan": "43200",
     "waitIncrementSeconds": "60",
     "offlineSessionMaxLifespanEnabled": "false"
   },
-  "keycloakVersion": "8.0.2",
+  "keycloakVersion": "9.0.0",
   "userManagedAccessAllowed": false
 }
