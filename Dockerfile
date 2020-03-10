@@ -1,4 +1,4 @@
-FROM openjdk:13-buster
+FROM openjdk:14-buster
 
 # explicitly set user/group IDs
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
