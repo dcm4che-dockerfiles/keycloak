@@ -44,7 +44,7 @@ RUN cd $HOME \
        modules/org/dcm4che/core \
        modules/org/dcm4che/net \
        modules/org/dcm4che/net-audit \
-    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-psql/42.2.8/jdbc-jboss-modules-psql-42.2.8.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-psql/42.2.10/jdbc-jboss-modules-psql-42.2.10.tar.gz | tar xz \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mysql/8.0.18/jdbc-jboss-modules-mysql-8.0.18.tar.gz | tar xz \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-oracle/12.2.0.1/jdbc-jboss-modules-oracle-12.2.0.1.tar.gz | tar xz \
     && chown -R keycloak:keycloak $JBOSS_HOME
