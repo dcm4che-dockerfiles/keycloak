@@ -1,4 +1,4 @@
-FROM openjdk:14-buster
+FROM openjdk:11.0.6-buster
 
 # explicitly set user/group IDs
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
@@ -19,7 +19,7 @@ RUN arch="$(dpkg --print-architecture)" \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=9.0.0 \
+ENV KEYCLOAK_VERSION=9.0.2 \
     LOGSTASH_GELF_VERSION=1.14.0 \
     DCM4CHE_VERSION=5.22.0 \
     JBOSS_HOME=/opt/keycloak
