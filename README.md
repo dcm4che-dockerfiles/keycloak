@@ -166,7 +166,7 @@ Path to keystore file with trusted certificates for HTTPS (default is
 `/opt/keycloak/standalone/configuration/keystore/cacerts.jks`, with sample CA certificate:
 ```
 Subject    - CN=IHE Europe CA,O=IHE Europe,C=FR
-Issuer     - CN=IHE Europe CA, O=IHE Europe, C=FR
+Issuer     - CN=IHE Europe CA,O=IHE Europe,C=FR
 Valid From - Fri Sep 28 11:19:29 UTC 2012
 Valid To   - Wed Sep 28 11:19:29 UTC 2022
 MD5 : 64:b6:1b:0f:8d:84:17:da:23:e4:e5:1c:56:ba:06:5d
@@ -192,6 +192,11 @@ Accepted values are:
 - `STRICT` - CN must match hostname exactly.
 
 Default value is `ANY`.
+
+#### `TRUSTSTORE_DISABLED`
+
+If `true`, certificate checking will include the [default set of root CA certificates in the JDK](https://openjdk.java.net/jeps/319)
+additionally to CA certificates in `TRUSTSTORE` (optional, default is `false`).
 
 #### `JAVA_OPTS`
 
