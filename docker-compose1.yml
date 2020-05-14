@@ -1,12 +1,12 @@
 version: "3"
 services:
   ldap:
-    image: dcm4che/slapd-dcm4chee:2.4.48-22.0
-    environment:
-      LDAP_URLS: "ldap:/// ldaps:///"
+    image: dcm4che/slapd-dcm4chee:2.4.48-22.2
     ports:
       - "389:389"
       - "636:636"
+    environment:
+      LDAP_URLS: "ldap:/// ldaps:///"
     volumes:
       - /var/local/dcm4chee-arc/ldap:/var/lib/openldap/openldap-data
       - /var/local/dcm4chee-arc/slapd.d:/etc/openldap/slapd.d
