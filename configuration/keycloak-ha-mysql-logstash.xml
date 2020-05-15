@@ -656,10 +656,10 @@
             <spi name="truststore">
                 <provider name="file" enabled="true">
                     <properties>
-                        <property name="file" value="${env.TRUSTSTORE}"/>
-                        <property name="password" value="${env.TRUSTSTORE_PASSWORD}"/>
+                        <property name="file" value="${JAVA_HOME}/lib/security/cacerts"/>
+                        <property name="password" value="changeit"/>
                         <property name="hostname-verification-policy" value="${env.HOSTNAME_VERIFICATION_POLICY:ANY}"/>
-                        <property name="disabled" value="${env.TRUSTSTORE_DISABLED:false}"/>
+                        <property name="disabled" value="false"/>
                     </properties>
                 </provider>
             </spi>
