@@ -183,6 +183,21 @@ Password used to protect the integrity of the keystore specified by `TRUSTSTORE`
 Password used to protect the integrity of the keystore specified by `TRUSTSTORE` via file input
 (alternative to `TRUSTSTORE_PASSWORD`).
 
+#### `HOSTNAME_VERIFICATION_POLICY`
+
+Specifies if Keycloak shall verify the hostname of the server’s certificate on outgoing HTTPS requests.
+Accepted values are:
+- `ANY` - the hostname is not verified.
+- `WILDCARD` - allows wildcards in subdomain names i.e. `*.foo.com`.
+- `STRICT` - CN must match hostname exactly.
+
+Default value is `ANY`.
+
+#### `TRUSTSTORE_DISABLED`
+
+If `true`, certificate checking will include the [default set of root CA certificates in the JDK](https://openjdk.java.net/jeps/319)
+additionally to CA certificates in `TRUSTSTORE` (optional, default is `false`).
+
 #### `JAVA_OPTS`
 
 Java VM options (optional, default is `"-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"`).

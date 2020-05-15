@@ -642,16 +642,23 @@
                     </properties>
                 </provider>
             </spi>
-            <spi name="x509cert-lookup">
-                <default-provider>${keycloak.x509cert.lookup.provider:default}</default-provider>
-                <provider name="default" enabled="true"/>
+            <spi name="truststore">
+                <provider name="file" enabled="true">
+                    <properties>
+                        <property name="file" value="${env.TRUSTSTORE}"/>
+                        <property name="password" value="${env.TRUSTSTORE_PASSWORD}"/>
+                        <property name="hostname-verification-policy" value="${env.HOSTNAME_VERIFICATION_POLICY:ANY}"/>
+                        <property name="disabled" value="${env.TRUSTSTORE_DISABLED:false}"/>
+                    </properties>
+                </provider>
             </spi>
             <spi name="hostname">
-                <default-provider>default</default-provider>
-                <provider name="default" enabled="true">
+                <default-provider>request</default-provider>
+                <provider name="fixed" enabled="true">
                     <properties>
-                        <property name="frontendUrl" value="${keycloak.frontendUrl:}"/>
-                        <property name="forceBackendUrlToFrontendUrl" value="false"/>
+                        <property name="hostname" value="localhost"/>
+                        <property name="httpPort" value="-1"/>
+                        <property name="httpsPort" value="-1"/>
                     </properties>
                 </provider>
             </spi>
