@@ -1,10 +1,10 @@
-FROM openjdk:11.0.6-buster
+FROM openjdk:11.0.7-buster
 
 # explicitly set user/group IDs
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
 
 # grab gosu for easy step-down from root
-ENV GOSU_VERSION 1.11
+ENV GOSU_VERSION 1.12
 RUN arch="$(dpkg --print-architecture)" \
     && set -x \
     && apt-get update \
@@ -19,7 +19,7 @@ RUN arch="$(dpkg --print-architecture)" \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=10.0.1 \
+ENV KEYCLOAK_VERSION=10.0.2 \
     LOGSTASH_GELF_VERSION=1.14.0 \
     DCM4CHE_VERSION=5.22.2 \
     JBOSS_HOME=/opt/keycloak
