@@ -126,7 +126,7 @@ Optional, default is `admin`.
 #### `KEYSTORE`
 
 Path to keystore file with private key and certificate for HTTPS (default is
-`/opt/keycloak/standalone/configuration/keystore/key.jks`, with sample key + certificate:
+`/opt/keycloak/standalone/configuration/keystore/key.p12`, with sample key + certificate:
 ```
 Subject    - CN=PACS_J4C,O=J4CARE,C=AT
 Issuer     - CN=IHE Europe CA, O=IHE Europe, C=FR
@@ -158,7 +158,7 @@ Password used to protect the private key in the keystore specified by `KEYSTORE`
 
 #### `KEYSTORE_TYPE`
 
-Type (`JKS` or `PKCS12`) of the keystore specified by `KEYSTORE` (default is `JKS`).
+Type (`JKS` or `PKCS12`) of the keystore specified by `KEYSTORE` (default is `PKCS12`).
 
 #### `TRUSTSTORE`
 

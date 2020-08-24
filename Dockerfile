@@ -55,8 +55,8 @@ COPY themes $JBOSS_HOME/themes
 
 ENV LDAP_URL=ldap://ldap:389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
-    KEYSTORE=/opt/keycloak/standalone/configuration/keystores/key.jks \
-    KEYSTORE_TYPE=JKS \
+    KEYSTORE=/opt/keycloak/standalone/configuration/keystores/key.p12 \
+    KEYSTORE_TYPE=PKCS12 \
     TRUSTSTORE=/opt/keycloak/standalone/configuration/keystores/cacerts.jks \
     KEYCLOAK_IMPORT=/opt/keycloak/standalone/configuration/dcm4che-realm.json
 
