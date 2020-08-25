@@ -57,7 +57,8 @@ ENV LDAP_URL=ldap://ldap:389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
     KEYSTORE=/opt/keycloak/standalone/configuration/keystores/key.p12 \
     KEYSTORE_TYPE=PKCS12 \
-    TRUSTSTORE=/opt/keycloak/standalone/configuration/keystores/cacerts.jks \
+    TRUSTSTORE=/opt/keycloak/standalone/configuration/keystores/cacerts.p12 \
+    TRUSTSTORE_TYPE=PKCS12 \
     KEYCLOAK_IMPORT=/opt/keycloak/standalone/configuration/dcm4che-realm.json
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
