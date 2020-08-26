@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
+
 <server xmlns="urn:jboss:domain:10.0">
     <extensions>
         <extension module="org.jboss.as.clustering.infinispan"/>
@@ -162,6 +163,9 @@
                          <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleExceptionSorter"></exception-sorter>
                          <background-validation-millis>10000</background-validation-millis>
                     </validation>
+                    <pool>
+                        <max-pool-size>100</max-pool-size>
+                    </pool>
                 </datasource>
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
@@ -515,8 +519,8 @@
         <subsystem xmlns="urn:jboss:domain:undertow:10.0" default-server="default-server" default-virtual-host="default-host" default-servlet-container="default" default-security-domain="other" statistics-enabled="${wildfly.undertow.statistics-enabled:${wildfly.statistics-enabled:false}}">
             <buffer-cache name="default"/>
             <server name="default-server">
-                <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true"/>
-                <https-listener name="https" socket-binding="https" ssl-context="httpsSSC"  enable-http2="true"/>
+                <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true" read-timeout="30000"/>
+                <https-listener name="https" socket-binding="https" ssl-context="httpsSSC"  enable-http2="true" read-timeout="30000"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
                     <http-invoker security-realm="ApplicationRealm"/>

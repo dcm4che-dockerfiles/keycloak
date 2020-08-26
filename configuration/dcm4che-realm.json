@@ -1626,9 +1626,11 @@
   "clientAuthenticationFlow": "clients",
   "dockerAuthenticationFlow": "docker auth",
   "attributes": {
+    "clientOfflineSessionMaxLifespan": "0",
     "clientSessionIdleTimeout": "0",
-    "clientSessionMaxLifespan": "0"
+    "clientSessionMaxLifespan": "0",
+    "clientOfflineSessionIdleTimeout": "0"
   },
-  "keycloakVersion": "11.0.0",
+  "keycloakVersion": "11.0.1",
   "userManagedAccessAllowed": false
 }
