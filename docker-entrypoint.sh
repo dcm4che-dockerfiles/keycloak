@@ -24,9 +24,9 @@ if [ "$1" = 'standalone.sh' ]; then
 
     if [ ! -f $JAVA_HOME/lib/security/cacerts.done ]; then
         touch $JAVA_HOME/lib/security/cacerts.done
-        if [ "$TRUSTSTORE" -a "$TRUSTSTORE" != "$JAVA_HOME/lib/security/cacerts" ]; then
+        if [ "$EXTRA_CACERTS" ]; then
             keytool -importkeystore \
-                -srckeystore $TRUSTSTORE -srcstorepass $TRUSTSTORE_PASSWORD \
+                -srckeystore $EXTRA_CACERTS -srcstorepass $EXTRA_CACERTS_PASSWORD \
                 -destkeystore $JAVA_HOME/lib/security/cacerts -deststorepass changeit
         fi
     fi

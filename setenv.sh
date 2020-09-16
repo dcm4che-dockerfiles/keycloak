@@ -29,7 +29,8 @@ file_env 'KEYCLOAK_USER'
 file_env 'KEYCLOAK_PASSWORD'
 file_env 'KEYSTORE_PASSWORD' 'secret'
 file_env 'KEY_PASSWORD' "${KEYSTORE_PASSWORD}"
-file_env 'TRUSTSTORE_PASSWORD' 'secret'
+file_env 'TRUSTSTORE_PASSWORD' 'changeit'
+file_env 'EXTRA_CACERTS_PASSWORD' 'secret'
 
 case $DB_VENDOR in
 	postgres)
