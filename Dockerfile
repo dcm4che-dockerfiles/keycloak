@@ -25,7 +25,7 @@ ENV KEYCLOAK_VERSION=12.0.1 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
-    && curl -L https://downloads.jboss.org/keycloak/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz | tar xz \
+    && curl -L https://github.com/keycloak/keycloak/releases/download/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz | tar xz \
     && mv keycloak-$KEYCLOAK_VERSION $JBOSS_HOME \
     && curl https://repo1.maven.org/maven2/biz/paluch/logging/logstash-gelf/${LOGSTASH_GELF_VERSION}/logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip -O \
     && unzip logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip \
