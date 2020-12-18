@@ -1,4 +1,4 @@
-FROM openjdk:11.0.9-buster
+FROM openjdk:11.0.9.1-buster
 
 # explicitly set user/group IDs
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
@@ -19,9 +19,9 @@ RUN arch="$(dpkg --print-architecture)" \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=11.0.3 \
+ENV KEYCLOAK_VERSION=12.0.1 \
     LOGSTASH_GELF_VERSION=1.14.1 \
-    DCM4CHE_VERSION=5.22.6 \
+    DCM4CHE_VERSION=5.23.0 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
@@ -44,9 +44,9 @@ RUN cd $HOME \
        modules/org/dcm4che/core \
        modules/org/dcm4che/net \
        modules/org/dcm4che/net-audit \
-    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-psql/42.2.12/jdbc-jboss-modules-psql-42.2.12.tar.gz | tar xz \
-    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mysql/8.0.20/jdbc-jboss-modules-mysql-8.0.20.tar.gz | tar xz \
-    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-oracle/19.6.0.0/jdbc-jboss-modules-oracle-19.6.0.0.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-psql/42.2.18/jdbc-jboss-modules-psql-42.2.18.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mysql/8.0.22/jdbc-jboss-modules-mysql-8.0.22.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-oracle/19.8.0.0/jdbc-jboss-modules-oracle-19.8.0.0.tar.gz | tar xz \
     && chown -R keycloak:keycloak $JBOSS_HOME
 
 COPY docker-entrypoint.sh setenv.sh /
