@@ -231,6 +231,10 @@ additionally to CA certificates in `TRUSTSTORE` (optional, default is `false`).
 
 Java VM options (optional, default is `"-Xms64m -Xmx512m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"`).
 
+#### `KEYCLOAK_WAIT_FOR`
+
+Indicates to delay the start of keycloak until specified TCP ports become accessible. Format: `<host>:<port> ...`, e.g.: `ldap:389 logstash:8514`.
+
 ### [Logstash/GELF Logger](https://logging.paluch.biz/) configuration:
 
 #### `LOGSTASH_HOST`

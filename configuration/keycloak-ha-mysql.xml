@@ -164,7 +164,7 @@
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
                     </driver>
                     <driver name="mysql" module="com.mysql">
-                        <driver-class>com.mysql.jdbc.Driver</driver-class>
+                        <driver-class>com.mysql.cj.jdbc.Driver</driver-class>
                     </driver>
                 </drivers>
             </datasources>
