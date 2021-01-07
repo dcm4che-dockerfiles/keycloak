@@ -265,7 +265,8 @@ DB vendor. Supported values are:
            
 - `h2` - use embedded H2 database,
 - `postgres` - use external PostgreSQL database,
-- `mysql` - use external MySQL and MariaDB database,
+- `mysql` - use external MySQL and MariaDB database with [MySQL Connector/J JDBC Driver](https://dev.mysql.com/downloads/connector/j/)
+- `mariadb` - use external MariaDB database with [MariaDB Connector/J JDBC Driver](https://downloads.mariadb.org/connector-java/)
 - `oracle` - use external Oracle database.
 
 (optional, default is `h2`).

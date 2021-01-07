@@ -39,6 +39,9 @@ case $DB_VENDOR in
 	mysql)
 		DB="-mysql"
 		;;
+	mariadb)
+		DB="-mariadb"
+		;;
 	oracle)
 		DB="-oracle"
 		;;

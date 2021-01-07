@@ -25,7 +25,7 @@ ENV KEYCLOAK_VERSION=11.0.3 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
-    && curl -L https://github.com/keycloak/keycloak/releases/download/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz | tar xz \
+    && curl -L https://downloads.jboss.org/keycloak/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz | tar xz \
     && mv keycloak-$KEYCLOAK_VERSION $JBOSS_HOME \
     && curl https://repo1.maven.org/maven2/biz/paluch/logging/logstash-gelf/${LOGSTASH_GELF_VERSION}/logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip -O \
     && unzip logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip \
@@ -46,6 +46,7 @@ RUN cd $HOME \
        modules/org/dcm4che/net-audit \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-psql/42.2.18/jdbc-jboss-modules-psql-42.2.18.tar.gz | tar xz \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mysql/8.0.22/jdbc-jboss-modules-mysql-8.0.22.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mariadb/2.7.1/jdbc-jboss-modules-mariadb-2.7.1.tar.gz | tar xz \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-oracle/19.8.0.0/jdbc-jboss-modules-oracle-19.8.0.0.tar.gz | tar xz \
     && chown -R keycloak:keycloak $JBOSS_HOME
 
