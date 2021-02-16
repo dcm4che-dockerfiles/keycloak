@@ -77,7 +77,7 @@
             </logger>
         </audit-log>
         <management-interfaces>
-            <http-interface ssl-context="httpsSSC">
+            <http-interface security-realm="ManagementRealm" ssl-context="httpsSSC">
                 <http-upgrade enabled="true"/>
                 <socket-binding http="management-http" https="management-https"/>
             </http-interface>
