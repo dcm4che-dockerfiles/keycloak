@@ -520,7 +520,7 @@
         <subsystem xmlns="urn:jboss:domain:undertow:10.0" default-server="default-server" default-virtual-host="default-host" default-servlet-container="default" default-security-domain="other" statistics-enabled="${wildfly.undertow.statistics-enabled:${wildfly.statistics-enabled:false}}">
             <buffer-cache name="default"/>
             <server name="default-server">
-                <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true" read-timeout="30000"/>
+                <http-listener name="default" socket-binding="http" redirect-socket="redirect-https" proxy-address-forwarding="${env.HTTP_PROXY_ADDRESS_FORWARDING:false}" enable-http2="true" read-timeout="30000"/>
                 <https-listener name="https" socket-binding="https" ssl-context="httpsSSC"  enable-http2="true" read-timeout="30000"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
@@ -647,6 +647,7 @@
         <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>
         <socket-binding name="http" port="${jboss.http.port:8080}"/>
         <socket-binding name="https" port="${jboss.https.port:8443}"/>
+        <socket-binding name="redirect-https" port="${jboss.redirect.https.port:8443}"/>
         <socket-binding name="management-http" interface="management" port="${jboss.management.http.port:9990}"/>
         <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9993}"/>
         <socket-binding name="txn-recovery-environment" port="4712"/>

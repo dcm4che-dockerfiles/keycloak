@@ -96,6 +96,12 @@ Defining the SSL/HTTPS requirements for interacting with the realm:
 Indicates if Keycloak should validate the password with the realm password policy before updating it
 (default value is `false`).
 
+#### `HTTP_PROXY_ADDRESS_FORWARDING`
+
+If this is enabled then the X-Forwarded-For and X-Forwarded-Proto headers will be used to determine the peer address.
+This allows applications that are behind a proxy to see the real address of the client, rather than the address
+of the proxy.  (optional, default is `false`).
+
 #### `HTTP_PORT`
 
 HTTP port of Keycloak (optional, default is `8080`).
@@ -103,6 +109,11 @@ HTTP port of Keycloak (optional, default is `8080`).
 #### `HTTPS_PORT`
 
 HTTPS port of Wildfly (optional, default is `8443`).
+
+#### `REDIRECT_HTTPS_PORT`
+
+HTTPS port to redirect requests that require security too. (optional, default is `8443`).
+Have to be set different to `HTTPS_PORT`, if running behind a HTTPS/SSL reverse proxy listing on a different port.
 
 #### `MANAGEMENT_HTTP_PORT`
 

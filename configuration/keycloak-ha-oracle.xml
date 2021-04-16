@@ -554,7 +554,7 @@
             <buffer-cache name="default"/>
             <server name="default-server">
                 <ajp-listener name="ajp" socket-binding="ajp"/>
-                <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true" read-timeout="30000"/>
+                <http-listener name="default" socket-binding="http" redirect-socket="redirect-https" proxy-address-forwarding="${env.HTTP_PROXY_ADDRESS_FORWARDING:false}" enable-http2="true" read-timeout="30000"/>
                 <https-listener name="https" socket-binding="https" ssl-context="httpsSSC"  enable-http2="true" read-timeout="30000"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
@@ -684,6 +684,7 @@
         <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>
         <socket-binding name="http" port="${jboss.http.port:8080}"/>
         <socket-binding name="https" port="${jboss.https.port:8443}"/>
+        <socket-binding name="redirect-https" port="${jboss.redirect.https.port:8443}"/>
         <socket-binding name="jgroups-mping" interface="private" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45700"/>
         <socket-binding name="jgroups-tcp" interface="private" port="${jboss.jgroups.tcp.port:7600}"/>
         <socket-binding name="jgroups-udp" interface="private" port="55200" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45688"/>
