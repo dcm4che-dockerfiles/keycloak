@@ -1,4 +1,4 @@
-FROM openjdk:11.0.9.1-buster
+FROM adoptopenjdk:11.0.10_9-jdk-hotspot-focal
 
 # explicitly set user/group IDs
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
@@ -8,7 +8,7 @@ ENV GOSU_VERSION 1.12
 RUN arch="$(dpkg --print-architecture)" \
     && set -x \
     && apt-get update \
-    && apt-get install -y netcat-openbsd \
+    && apt-get install -y gnupg netcat-openbsd unzip \
     && rm -rf /var/lib/apt/lists/* \
     && curl -o /usr/local/bin/gosu -fSL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$arch" \
     && curl -o /usr/local/bin/gosu.asc -fSL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$arch.asc" \
@@ -58,7 +58,7 @@ ENV LDAP_URL=ldap://ldap:389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
     KEYSTORE=/opt/keycloak/standalone/configuration/keystores/key.p12 \
     KEYSTORE_TYPE=PKCS12 \
-    TRUSTSTORE=/usr/local/openjdk-11/lib/security/cacerts \
+    TRUSTSTORE=/opt/java/openjdk/lib/security/cacerts \
     TRUSTSTORE_TYPE=JKS \
     EXTRA_CACERTS=/opt/keycloak/standalone/configuration/keystores/cacerts.p12 \
     KEYCLOAK_IMPORT=/opt/keycloak/standalone/configuration/dcm4che-realm.json
