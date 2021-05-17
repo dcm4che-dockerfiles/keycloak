@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11.0.10_9-jdk-hotspot-focal
+FROM adoptopenjdk:11.0.11_9-jdk-hotspot-focal
 
 # explicitly set user/group IDs
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
