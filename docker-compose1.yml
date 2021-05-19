@@ -1,7 +1,7 @@
 version: "3"
 services:
   ldap:
-    image: dcm4che/slapd-dcm4chee:2.4.50-23.0
+    image: dcm4che/slapd-dcm4chee:2.4.57-24.0
     ports:
       - "389:389"
       - "636:636"
@@ -31,7 +31,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /var/local/dcm4chee-arc/mysql:/var/lib/mysql
   keycloak:
-    image: dcm4che/keycloak:11.0.3
+    image: dcm4che/keycloak:13.0.0
     ports:
       - "8880:8880"
       - "8843:8843"

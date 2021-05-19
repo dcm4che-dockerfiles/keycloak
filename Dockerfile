@@ -19,13 +19,13 @@ RUN arch="$(dpkg --print-architecture)" \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=11.0.3 \
+ENV KEYCLOAK_VERSION=13.0.0 \
     LOGSTASH_GELF_VERSION=1.14.1 \
-    DCM4CHE_VERSION=5.23.0 \
+    DCM4CHE_VERSION=5.23.3 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
-    && curl -L https://downloads.jboss.org/keycloak/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz | tar xz \
+    && curl -L https://github.com/keycloak/keycloak/releases/download/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz | tar xz \
     && mv keycloak-$KEYCLOAK_VERSION $JBOSS_HOME \
     && curl https://repo1.maven.org/maven2/biz/paluch/logging/logstash-gelf/${LOGSTASH_GELF_VERSION}/logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip -O \
     && unzip logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip \
