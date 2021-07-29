@@ -4,7 +4,7 @@ FROM adoptopenjdk:11.0.11_9-jdk-hotspot-focal
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
 
 # grab gosu for easy step-down from root
-ENV GOSU_VERSION 1.12
+ENV GOSU_VERSION 1.13
 RUN arch="$(dpkg --print-architecture)" \
     && set -x \
     && apt-get update \
@@ -13,15 +13,17 @@ RUN arch="$(dpkg --print-architecture)" \
     && curl -o /usr/local/bin/gosu -fSL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$arch" \
     && curl -o /usr/local/bin/gosu.asc -fSL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$arch.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+    && gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
     && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
+    && gpgconf --kill all \
     && rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
+    && gosu --version \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=13.0.0 \
+ENV KEYCLOAK_VERSION=14.0.0 \
     LOGSTASH_GELF_VERSION=1.14.1 \
-    DCM4CHE_VERSION=5.23.3 \
+    DCM4CHE_VERSION=5.24.0 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
@@ -44,10 +46,10 @@ RUN cd $HOME \
        modules/org/dcm4che/core \
        modules/org/dcm4che/net \
        modules/org/dcm4che/net-audit \
-    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-psql/42.2.18/jdbc-jboss-modules-psql-42.2.18.tar.gz | tar xz \
-    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mysql/8.0.22/jdbc-jboss-modules-mysql-8.0.22.tar.gz | tar xz \
-    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mariadb/2.7.1/jdbc-jboss-modules-mariadb-2.7.1.tar.gz | tar xz \
-    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-oracle/19.8.0.0/jdbc-jboss-modules-oracle-19.8.0.0.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-psql/42.2.21/jdbc-jboss-modules-psql-42.2.21.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mysql/8.0.25/jdbc-jboss-modules-mysql-8.0.25.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mariadb/2.7.3/jdbc-jboss-modules-mariadb-2.7.3.tar.gz | tar xz \
+    && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-oracle/21.1.0.0/jdbc-jboss-modules-oracle-21.1.0.0.tar.gz | tar xz \
     && chown -R keycloak:keycloak $JBOSS_HOME
 
 COPY docker-entrypoint.sh setenv.sh /

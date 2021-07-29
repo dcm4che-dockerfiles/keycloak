@@ -88,18 +88,6 @@
   "webAuthnPolicyPasswordlessCreateTimeout": 0,
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
-  "clientProfiles": {
-    "profiles": []
-  },
-  "clientPolicies": {
-    "policies": [
-      {
-        "name": "builtin-default-policy",
-        "builtin": true,
-        "enable": false
-      }
-    ]
-  },
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -892,14 +880,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
-            "oidc-full-name-mapper",
-            "saml-role-list-mapper",
-            "oidc-usermodel-property-mapper",
-            "saml-user-property-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-attribute-mapper",
             "saml-user-attribute-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "saml-user-property-mapper",
+            "oidc-usermodel-property-mapper",
+            "saml-role-list-mapper",
+            "oidc-address-mapper",
+            "oidc-full-name-mapper"
           ]
         }
       },
@@ -927,13 +915,13 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
+            "saml-user-attribute-mapper",
+            "oidc-address-mapper",
+            "oidc-usermodel-property-mapper",
+            "saml-user-property-mapper",
             "oidc-usermodel-attribute-mapper",
             "oidc-sha256-pairwise-sub-mapper",
-            "saml-user-attribute-mapper",
-            "oidc-usermodel-property-mapper",
-            "oidc-address-mapper",
             "oidc-full-name-mapper",
-            "saml-user-property-mapper",
             "saml-role-list-mapper"
           ]
         }
@@ -1009,10 +997,10 @@
                 "is.mandatory.in.ldap": [
                   "false"
                 ],
-                "read.only": [
+                "always.read.value.from.ldap": [
                   "true"
                 ],
-                "always.read.value.from.ldap": [
+                "read.only": [
                   "true"
                 ],
                 "user.model.attribute": [
@@ -1032,10 +1020,10 @@
                 "is.mandatory.in.ldap": [
                   "false"
                 ],
-                "read.only": [
+                "always.read.value.from.ldap": [
                   "true"
                 ],
-                "always.read.value.from.ldap": [
+                "read.only": [
                   "true"
                 ],
                 "user.model.attribute": [
@@ -1055,17 +1043,17 @@
                 "membership.attribute.type": [
                   "DN"
                 ],
-                "roles.dn": [
-                  "ou=account,${env.LDAP_BASE_DN}"
-                ],
                 "user.roles.retrieve.strategy": [
                   "LOAD_ROLES_BY_MEMBER_ATTRIBUTE"
                 ],
-                "membership.ldap.attribute": [
-                  "member"
+                "roles.dn": [
+                  "ou=account,${env.LDAP_BASE_DN}"
                 ],
                 "membership.user.ldap.attribute": [
                   "uid"
+                ],
+                "membership.ldap.attribute": [
+                  "member"
                 ],
                 "role.name.ldap.attribute": [
                   "cn"
@@ -1165,17 +1153,17 @@
                 "membership.attribute.type": [
                   "DN"
                 ],
-                "roles.dn": [
-                  "ou=users,${env.LDAP_BASE_DN}"
-                ],
                 "user.roles.retrieve.strategy": [
                   "LOAD_ROLES_BY_MEMBER_ATTRIBUTE"
                 ],
-                "membership.user.ldap.attribute": [
-                  "uid"
+                "roles.dn": [
+                  "ou=users,${env.LDAP_BASE_DN}"
                 ],
                 "membership.ldap.attribute": [
                   "member"
+                ],
+                "membership.user.ldap.attribute": [
+                  "uid"
                 ],
                 "role.name.ldap.attribute": [
                   "cn"
@@ -1200,17 +1188,17 @@
                 "membership.attribute.type": [
                   "DN"
                 ],
-                "roles.dn": [
-                  "ou=realm-management,${env.LDAP_BASE_DN}"
-                ],
                 "user.roles.retrieve.strategy": [
                   "LOAD_ROLES_BY_MEMBER_ATTRIBUTE"
                 ],
-                "membership.ldap.attribute": [
-                  "member"
+                "roles.dn": [
+                  "ou=realm-management,${env.LDAP_BASE_DN}"
                 ],
                 "membership.user.ldap.attribute": [
                   "uid"
+                ],
+                "membership.ldap.attribute": [
+                  "member"
                 ],
                 "role.name.ldap.attribute": [
                   "cn"
@@ -1258,11 +1246,11 @@
           "pagination": [
             "true"
           ],
-          "usersDn": [
-            "ou=users,${env.LDAP_BASE_DN}"
-          ],
           "connectionPooling": [
             "true"
+          ],
+          "usersDn": [
+            "ou=users,${env.LDAP_BASE_DN}"
           ],
           "cachePolicy": [
             "DEFAULT"
@@ -1276,17 +1264,17 @@
           "enabled": [
             "true"
           ],
+          "usernameLDAPAttribute": [
+            "uid"
+          ],
+          "bindCredential": [
+            "${env.LDAP_ROOTPASS}"
+          ],
           "changedSyncPeriod": [
             "-1"
           ],
           "bindDn": [
             "cn=admin,${env.LDAP_BASE_DN}"
-          ],
-          "bindCredential": [
-            "${env.LDAP_ROOTPASS}"
-          ],
-          "usernameLDAPAttribute": [
-            "uid"
           ],
           "lastSync": [
             "1621337428"
@@ -2017,6 +2005,12 @@
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5"
   },
-  "keycloakVersion": "13.0.0",
-  "userManagedAccessAllowed": false
+  "keycloakVersion": "14.0.0",
+  "userManagedAccessAllowed": false,
+  "clientProfiles": {
+    "profiles": []
+  },
+  "clientPolicies": {
+    "policies": []
+  }
 }
