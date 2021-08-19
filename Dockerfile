@@ -21,7 +21,7 @@ RUN arch="$(dpkg --print-architecture)" \
     && gosu --version \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=14.0.0 \
+ENV KEYCLOAK_VERSION=15.0.1 \
     LOGSTASH_GELF_VERSION=1.14.1 \
     DCM4CHE_VERSION=5.24.0 \
     JBOSS_HOME=/opt/keycloak

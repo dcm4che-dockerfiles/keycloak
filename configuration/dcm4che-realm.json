@@ -2002,10 +2002,11 @@
     "oauth2DevicePollingInterval": "5",
     "clientSessionIdleTimeout": "0",
     "clientSessionMaxLifespan": "0",
+    "parRequestUriLifespan": "60",
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5"
   },
-  "keycloakVersion": "14.0.0",
+  "keycloakVersion": "15.0.1",
   "userManagedAccessAllowed": false,
   "clientProfiles": {
     "profiles": []
