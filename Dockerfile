@@ -23,7 +23,7 @@ RUN arch="$(dpkg --print-architecture)" \
 
 ENV KEYCLOAK_VERSION=15.0.2 \
     LOGSTASH_GELF_VERSION=1.14.1 \
-    DCM4CHE_VERSION=5.24.0 \
+    DCM4CHE_VERSION=5.24.2 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
@@ -36,6 +36,7 @@ RUN cd $HOME \
     && rm logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip \
     && mkdir /docker-entrypoint.d \
     && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
+    && mv $JBOSS_HOME/themes /docker-entrypoint.d \
     && cd $JBOSS_HOME \
     && curl http://maven.dcm4che.org/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}.tar.gz | tar xz \
        modules/org/dcm4che/audit \
@@ -54,7 +55,7 @@ RUN cd $HOME \
 
 COPY docker-entrypoint.sh setenv.sh /
 COPY configuration /docker-entrypoint.d/configuration
-COPY themes $JBOSS_HOME/themes
+COPY themes /docker-entrypoint.d/themes
 
 ENV LDAP_URL=ldap://ldap:389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \

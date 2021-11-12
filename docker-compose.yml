@@ -1,7 +1,7 @@
 version: "3"
 services:
   ldap:
-    image: dcm4che/slapd-dcm4chee:2.4.57-24.0
+    image: dcm4che/slapd-dcm4chee:2.4.57-24.2
     ports:
       - "389:389"
       - "636:636"
@@ -31,3 +31,4 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - /var/local/dcm4chee-arc/keycloak:/opt/keycloak/standalone
+      - /var/local/dcm4chee-arc/keycloak-themes:/opt/keycloak/themes

@@ -21,6 +21,10 @@ if [ "$1" = 'standalone.sh' ]; then
         fi
         chown -R keycloak:keycloak $JBOSS_HOME/standalone
     fi
+    if [ ! -d $JBOSS_HOME/themes/keycloak ]; then
+        cp -r /docker-entrypoint.d/themes $JBOSS_HOME
+        chown -R keycloak:keycloak $JBOSS_HOME/themes
+    fi
 
     if [ ! -f $JAVA_HOME/lib/security/cacerts.done ]; then
         touch $JAVA_HOME/lib/security/cacerts.done
