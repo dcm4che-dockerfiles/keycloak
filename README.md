@@ -132,7 +132,7 @@ User to authenticate to the Wildfly Administration Console (optional, default is
 User role to identify super users, which have unrestricted access to all UI functions of the Archive. Login/Logout of
 such users will emit an [Audit Message for Security Alert](http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.11)
 with _Event Type Code_: `(110127,DCM,"Emergency Override Started")`/`(110138,DCM,"Emergency Override Stopped")`.
-Optional, default is `admin`.
+Optional, default is `root`.
 
 #### `KEYSTORE`
 

@@ -23,7 +23,7 @@ RUN arch="$(dpkg --print-architecture)" \
 
 ENV KEYCLOAK_VERSION=15.0.2 \
     LOGSTASH_GELF_VERSION=1.14.1 \
-    DCM4CHE_VERSION=5.24.2 \
+    DCM4CHE_VERSION=5.25.0 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
