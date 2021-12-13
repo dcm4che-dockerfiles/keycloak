@@ -880,14 +880,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-sha256-pairwise-sub-mapper",
-            "oidc-usermodel-attribute-mapper",
             "saml-user-attribute-mapper",
-            "saml-user-property-mapper",
-            "oidc-usermodel-property-mapper",
             "saml-role-list-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-full-name-mapper",
+            "oidc-usermodel-attribute-mapper",
             "oidc-address-mapper",
-            "oidc-full-name-mapper"
+            "oidc-sha256-pairwise-sub-mapper",
+            "saml-user-property-mapper"
           ]
         }
       },
@@ -915,14 +915,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-user-attribute-mapper",
             "oidc-address-mapper",
-            "oidc-usermodel-property-mapper",
-            "saml-user-property-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
             "oidc-full-name-mapper",
-            "saml-role-list-mapper"
+            "saml-user-property-mapper",
+            "saml-role-list-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "saml-user-attribute-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-usermodel-attribute-mapper"
           ]
         }
       },
@@ -1049,17 +1049,17 @@
                 "roles.dn": [
                   "ou=account,${env.LDAP_BASE_DN}"
                 ],
-                "membership.user.ldap.attribute": [
-                  "uid"
-                ],
                 "membership.ldap.attribute": [
                   "member"
                 ],
-                "role.name.ldap.attribute": [
-                  "cn"
+                "membership.user.ldap.attribute": [
+                  "uid"
                 ],
                 "memberof.ldap.attribute": [
                   "memberOf"
+                ],
+                "role.name.ldap.attribute": [
+                  "cn"
                 ],
                 "use.realm.roles.mapping": [
                   "false"
@@ -1107,10 +1107,10 @@
                 "is.mandatory.in.ldap": [
                   "false"
                 ],
-                "always.read.value.from.ldap": [
+                "read.only": [
                   "false"
                 ],
-                "read.only": [
+                "always.read.value.from.ldap": [
                   "false"
                 ],
                 "user.model.attribute": [
@@ -1159,11 +1159,11 @@
                 "roles.dn": [
                   "ou=users,${env.LDAP_BASE_DN}"
                 ],
-                "membership.ldap.attribute": [
-                  "member"
-                ],
                 "membership.user.ldap.attribute": [
                   "uid"
+                ],
+                "membership.ldap.attribute": [
+                  "member"
                 ],
                 "role.name.ldap.attribute": [
                   "cn"
@@ -1188,11 +1188,11 @@
                 "membership.attribute.type": [
                   "DN"
                 ],
+                "roles.dn": [
+                  "ou=realm-management,dc=dcm4che,dc=org"
+                ],
                 "user.roles.retrieve.strategy": [
                   "LOAD_ROLES_BY_MEMBER_ATTRIBUTE"
-                ],
-                "roles.dn": [
-                  "ou=realm-management,${env.LDAP_BASE_DN}"
                 ],
                 "membership.user.ldap.attribute": [
                   "uid"
@@ -1206,11 +1206,11 @@
                 "use.realm.roles.mapping": [
                   "false"
                 ],
-                "role.object.classes": [
-                  "groupOfNames"
-                ],
                 "client.id": [
                   "realm-management"
+                ],
+                "role.object.classes": [
+                  "groupOfNames"
                 ]
               }
             },
@@ -1226,10 +1226,10 @@
                 "is.mandatory.in.ldap": [
                   "true"
                 ],
-                "always.read.value.from.ldap": [
+                "read.only": [
                   "false"
                 ],
-                "read.only": [
+                "always.read.value.from.ldap": [
                   "false"
                 ],
                 "user.model.attribute": [
@@ -1285,11 +1285,11 @@
           "uuidLDAPAttribute": [
             "entryUUID"
           ],
-          "connectionUrl": [
-            "${env.LDAP_URL}"
-          ],
           "allowKerberosAuthentication": [
             "false"
+          ],
+          "connectionUrl": [
+            "${env.LDAP_URL}"
           ],
           "syncRegistrations": [
             "true"
@@ -1306,11 +1306,11 @@
           "useTruststoreSpi": [
             "ldapsOnly"
           ],
-          "trustEmail": [
-            "false"
-          ],
           "priority": [
             "0"
+          ],
+          "trustEmail": [
+            "false"
           ],
           "userObjectClasses": [
             "inetOrgPerson, organizationalPerson"
@@ -2001,12 +2001,12 @@
     "clientOfflineSessionMaxLifespan": "0",
     "oauth2DevicePollingInterval": "5",
     "clientSessionIdleTimeout": "0",
-    "clientSessionMaxLifespan": "0",
     "parRequestUriLifespan": "60",
+    "clientSessionMaxLifespan": "0",
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5"
   },
-  "keycloakVersion": "15.0.2",
+  "keycloakVersion": "15.1.0",
   "userManagedAccessAllowed": false,
   "clientProfiles": {
     "profiles": []
