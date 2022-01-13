@@ -317,6 +317,10 @@ User's password to use to authenticate to the external database via file input (
 
 Requires use of external Postgres or MySQL/MariaDB database to persist data.
 
+#### `JGROUPS_BIND_IP`
+
+JGroups server socket bind address (optional, default `$(hostname -i)`).
+
 #### `JGROUPS_TCP_PORT`
 
 JGroups TCP stack port (optional, default is `7600`).

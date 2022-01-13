@@ -1,7 +1,7 @@
 version: "3"
 services:
   ldap:
-    image: dcm4che/slapd-dcm4chee:2.6.0-25.0
+    image: dcm4che/slapd-dcm4chee:2.6.0-25.1
     ports:
       - "389:389"
       - "636:636"
@@ -12,7 +12,7 @@ services:
       - /var/local/dcm4chee-arc/slapd.d:/etc/openldap/slapd.d
       - /var/local/dcm4chee-arc/keycloak:/opt/keycloak/standalone
   mariadb:
-    image: mariadb:10.4
+    image: mariadb:10.7.1
     ports:
       - "3306:3306"
     environment:
@@ -20,6 +20,9 @@ services:
       MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
       MYSQL_PASSWORD: keycloak
+    command:
+      - "--character-set-server=latin1"
+      - "--collation-server=latin1_swedish_ci"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro

@@ -55,11 +55,11 @@ if [ -n "$LOGSTASH_HOST" ]; then
 	LOGSTASH="-logstash"
 fi
 
-BIND_IP=$(hostname -i)
-SYS_PROPS="-c keycloak${HA}${DB}${LOGSTASH}.xml"
-SYS_PROPS+=" -Djboss.bind.address=$BIND_IP"
-SYS_PROPS+=" -Djboss.bind.address.management=$BIND_IP"
-SYS_PROPS+=" -Djboss.bind.address.private=$BIND_IP"
+if [ -z "$JGROUPS_BIND_IP" ]; then
+  JGROUPS_BIND_IP=$(hostname -i)
+fi
+
+SYS_PROPS="-bprivate=$JGROUPS_BIND_IP -c keycloak${HA}${DB}${LOGSTASH}.xml"
 SYS_PROPS+=" -Djboss.management.http.port=${MANAGEMENT_HTTP_PORT:-9990}"
 SYS_PROPS+=" -Djboss.management.https.port=${MANAGEMENT_HTTPS_PORT:-9993}"
 SYS_PROPS+=" -Djboss.http.port=${HTTP_PORT:-8080}"

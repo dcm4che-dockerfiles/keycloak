@@ -1,0 +1,49 @@
+version: "3.5"
+services:
+  ldap:
+    image: dcm4che/slapd-dcm4chee:2.6.0-25.1
+    deploy:
+      placement:
+        constraints:
+          - "node.hostname==node1"
+    networks:
+      hostnet: {}
+    environment:
+      LDAP_URLS: "ldap://ldap1/"
+      LDAP_REPLICATION_HOSTS: "ldap://ldap1/ ldap://ldap2/"
+    extra_hosts:
+      - "ldap1:10.109.53.103"
+      - "ldap2:10.109.53.203"
+    volumes:
+      - /var/local/dcm4chee-arc/ldap:/var/lib/openldap/openldap-data
+      - /var/local/dcm4chee-arc/slapd.d:/etc/openldap/slapd.d
+  mariadb:
+    image: mariadb:10.7.1
+    deploy:
+      placement:
+        constraints:
+          - "node.hostname==node1"
+    networks:
+      hostnet: {}
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: keycloak
+    command:
+      - "--character-set-server=latin1"
+      - "--collation-server=latin1_swedish_ci"
+      - "--log-bin"
+      - "--log-basename=node1"
+      - "--server-id=1"
+      - "--replicate-do-db=keycloak"
+      - "--auto_increment_increment=2"
+      - "--auto_increment_offset=1"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/local/dcm4chee-arc/mysql:/var/lib/mysql
+networks:
+  hostnet:
+    external: true
+    name: host
