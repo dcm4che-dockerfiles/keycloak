@@ -56,7 +56,11 @@ if [ -n "$LOGSTASH_HOST" ]; then
 fi
 
 if [ -z "$JGROUPS_BIND_IP" ]; then
-  JGROUPS_BIND_IP=$(hostname -i)
+  if [ -n "$JGROUPS_BIND_IP_PREFIX" ]; then
+    for JGROUPS_BIND_IP in $(hostname -I); do if [[ "$JGROUPS_BIND_IP" == "$JGROUPS_BIND_IP_PREFIX"* ]]; then break; fi; done
+  else
+    JGROUPS_BIND_IP=$(hostname -i)
+  fi
 fi
 
 SYS_PROPS="-bprivate=$JGROUPS_BIND_IP -c keycloak${HA}${DB}${LOGSTASH}.xml"

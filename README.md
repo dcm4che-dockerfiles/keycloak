@@ -319,7 +319,11 @@ Requires use of external Postgres or MySQL/MariaDB database to persist data.
 
 #### `JGROUPS_BIND_IP`
 
-JGroups server socket bind address (optional, default `$(hostname -i)`).
+JGroups server socket bind address (optional, default `$(hostname -i)` or select particular container IP according `JGROUPS_BIND_IP_PREFIX`).
+
+#### `JGROUPS_BIND_IP_PREFIX`
+
+JGroups server socket bind address prefix used to select particular container IP if no `JGROUPS_BIND_IP` is specified.
 
 #### `JGROUPS_TCP_PORT`
 

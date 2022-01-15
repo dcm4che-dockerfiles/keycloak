@@ -3,38 +3,29 @@ services:
   ldap:
     image: dcm4che/slapd-dcm4chee:2.6.0-25.1
     deploy:
-      endpoint_mode: dnsrr
       placement:
         constraints:
           - "node.hostname==node2"
-    ports:
-      - target: 389
-        published: 389
-        protocol: tcp
-        mode: host
+    networks:
+      hostnet: {}
     environment:
       LDAP_URLS: "ldap://ldap2/"
       LDAP_REPLICATION_HOSTS: "ldap://ldap1/ ldap://ldap2/"
-      LDAP_EXTRA_HOST: "ldap2"
-      LDAP_EXTRA_HOST_IP_PREFIX: "172.18.0."
       SKIP_INIT_CONFIG: "true"
     extra_hosts:
       - "ldap1:10.109.53.228"
+      - "ldap2:10.109.53.26"
     volumes:
       - /var/local/dcm4chee-arc/ldap:/var/lib/openldap/openldap-data
       - /var/local/dcm4chee-arc/slapd.d:/etc/openldap/slapd.d
   mariadb:
     image: mariadb:10.7.1
     deploy:
-      endpoint_mode: dnsrr
       placement:
         constraints:
           - "node.hostname==node2"
-    ports:
-      - target: 3306
-        published: 3306
-        protocol: tcp
-        mode: host
+    networks:
+      hostnet: {}
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: keycloak
@@ -53,3 +44,33 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - /var/local/dcm4chee-arc/mysql:/var/lib/mysql
+  keycloak:
+    image: dcm4che/keycloak:15.1.0
+    deploy:
+      placement:
+        constraints:
+          - "node.hostname==node2"
+    networks:
+      hostnet: {}
+    environment:
+      DB_VENDOR: mysql
+      KEYCLOAK_DB_CONNECTION_URL: jdbc:mysql://mariadb:3306/keycloak
+      JGROUPS_DISCOVERY_EXTERNAL_IP: 10.109.53.26
+      JGROUPS_DISCOVERY_INITIAL_HOSTS: "10.109.53.228[7600],10.109.53.26[7600]"
+      HTTP_PORT: 8880
+      HTTPS_PORT: 8843
+      MANAGEMENT_HTTP_PORT: 8990
+      MANAGEMENT_HTTPS_PORT: 8993
+      KEYCLOAK_WAIT_FOR: ldap:389 mariadb:3306
+      LDAP_URL: ldap://ldap:389
+    extra_hosts:
+      - "ldap:10.109.53.26"
+      - "mariadb:10.109.53.26"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/local/dcm4chee-arc/keycloak:/opt/keycloak/standalone
+networks:
+  hostnet:
+    external: true
+    name: host

@@ -3,29 +3,38 @@ services:
   ldap:
     image: dcm4che/slapd-dcm4chee:2.6.0-25.1
     deploy:
+      endpoint_mode: dnsrr
       placement:
         constraints:
           - "node.hostname==node2"
-    networks:
-      hostnet: {}
+    ports:
+      - target: 389
+        published: 389
+        protocol: tcp
+        mode: host
     environment:
       LDAP_URLS: "ldap://ldap2/"
       LDAP_REPLICATION_HOSTS: "ldap://ldap1/ ldap://ldap2/"
+      LDAP_EXTRA_HOST: "ldap2"
+      LDAP_EXTRA_HOST_IP_PREFIX: "172.18.0."
       SKIP_INIT_CONFIG: "true"
     extra_hosts:
-      - "ldap1:10.109.53.103"
-      - "ldap2:10.109.53.203"
+      - "ldap1:10.109.53.228"
     volumes:
       - /var/local/dcm4chee-arc/ldap:/var/lib/openldap/openldap-data
       - /var/local/dcm4chee-arc/slapd.d:/etc/openldap/slapd.d
   mariadb:
     image: mariadb:10.7.1
     deploy:
+      endpoint_mode: dnsrr
       placement:
         constraints:
           - "node.hostname==node2"
-    networks:
-      hostnet: {}
+    ports:
+      - target: 3306
+        published: 3306
+        protocol: tcp
+        mode: host
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: keycloak
@@ -47,29 +56,46 @@ services:
   keycloak:
     image: dcm4che/keycloak:15.1.0
     deploy:
+      endpoint_mode: dnsrr
       placement:
         constraints:
           - "node.hostname==node2"
-    networks:
-      hostnet: {}
+    ports:
+      - target: 8880
+        published: 8880
+        protocol: tcp
+        mode: host
+      - target: 8843
+        published: 8843
+        protocol: tcp
+        mode: host
+      - target: 8990
+        published: 8990
+        protocol: tcp
+        mode: host
+      - target: 8993
+        published: 8993
+        protocol: tcp
+        mode: host
+      - target: 7600
+        published: 7600
+        protocol: tcp
+        mode: host
     environment:
       DB_VENDOR: mysql
       KEYCLOAK_DB_CONNECTION_URL: jdbc:mysql://mariadb:3306/keycloak
-      JGROUPS_DISCOVERY_EXTERNAL_IP: 10.109.53.203
-      JGROUPS_DISCOVERY_INITIAL_HOSTS: "node1[7600],node2[7600]"
+      JGROUPS_DISCOVERY_EXTERNAL_IP: 10.109.53.26
+      JGROUPS_DISCOVERY_INITIAL_HOSTS: "10.109.53.228[7600],10.109.53.26[7600]"
+      JGROUPS_BIND_IP_PREFIX: "172.18.0."
       HTTP_PORT: 8880
       HTTPS_PORT: 8843
       MANAGEMENT_HTTP_PORT: 8990
       MANAGEMENT_HTTPS_PORT: 8993
       KEYCLOAK_WAIT_FOR: ldap:389 mariadb:3306
+      LDAP_URL: ldap://ldap:389
     extra_hosts:
-      - "ldap:10.109.53.203"
-      - "mariadb:10.109.53.203"
+      - "ldap:10.109.53.26"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - /var/local/dcm4chee-arc/keycloak:/opt/keycloak/standalone
-networks:
-  hostnet:
-    external: true
-    name: host
