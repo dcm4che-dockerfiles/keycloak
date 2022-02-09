@@ -11,7 +11,7 @@ services:
       - /var/local/dcm4chee-arc/ldap:/var/lib/openldap/openldap-data
       - /var/local/dcm4chee-arc/slapd.d:/etc/openldap/slapd.d
   keycloak:
-    image: dcm4che/keycloak:15.1.0
+    image: dcm4che/keycloak:16.1.1
     ports:
       - "8880:8880"
       - "8843:8843"
@@ -25,6 +25,8 @@ services:
       MANAGEMENT_HTTPS_PORT: 8993
       LDAP_URL: ldaps://ldap:636
       KEYCLOAK_WAIT_FOR: ldap:636
+      KEYCLOAK_USER: keycloak-admin
+      KEYCLOAK_PASSWORD: changeit
     depends_on:
       - ldap
     volumes:

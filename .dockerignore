@@ -1,0 +1,6 @@
+.git
+.gitattributes
+.gitignore
+*.iml
+*.md
+docker-*.yml

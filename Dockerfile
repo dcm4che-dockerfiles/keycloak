@@ -1,10 +1,10 @@
-FROM eclipse-temurin:11.0.13_8-jdk-focal
+FROM eclipse-temurin:11.0.14_9-jdk-focal
 
 # explicitly set user/group IDs
 RUN groupadd -r keycloak --gid=1029 && useradd -r -g keycloak --uid=1029 -d /opt/keycloak keycloak
 
 # grab gosu for easy step-down from root
-ENV GOSU_VERSION 1.13
+ENV GOSU_VERSION 1.14
 RUN arch="$(dpkg --print-architecture)" \
     && set -x \
     && apt-get update \
@@ -21,9 +21,9 @@ RUN arch="$(dpkg --print-architecture)" \
     && gosu --version \
     && gosu nobody true
 
-ENV KEYCLOAK_VERSION=15.1.0 \
-    LOGSTASH_GELF_VERSION=1.14.1 \
-    DCM4CHE_VERSION=5.25.0 \
+ENV KEYCLOAK_VERSION=16.1.1 \
+    LOGSTASH_GELF_VERSION=1.15.0 \
+    DCM4CHE_VERSION=5.25.1 \
     JBOSS_HOME=/opt/keycloak
 
 RUN cd $HOME \
@@ -34,9 +34,6 @@ RUN cd $HOME \
     && mv logstash-gelf-${LOGSTASH_GELF_VERSION}/biz $JBOSS_HOME/modules/biz \
     && rmdir logstash-gelf-${LOGSTASH_GELF_VERSION} \
     && rm logstash-gelf-${LOGSTASH_GELF_VERSION}-logging-module.zip \
-    && mkdir /docker-entrypoint.d \
-    && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
-    && mv $JBOSS_HOME/themes /docker-entrypoint.d \
     && cd $JBOSS_HOME \
     && curl http://maven.dcm4che.org/org/dcm4che/dcm4che-jboss-modules/$DCM4CHE_VERSION/dcm4che-jboss-modules-${DCM4CHE_VERSION}.tar.gz | tar xz \
        modules/org/dcm4che/audit \
@@ -51,11 +48,14 @@ RUN cd $HOME \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mysql/8.0.25/jdbc-jboss-modules-mysql-8.0.25.tar.gz | tar xz \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-mariadb/2.7.3/jdbc-jboss-modules-mariadb-2.7.3.tar.gz | tar xz \
     && curl -f http://maven.dcm4che.org/org/dcm4che/jdbc-jboss-modules-oracle/21.1.0.0/jdbc-jboss-modules-oracle-21.1.0.0.tar.gz | tar xz \
-    && chown -R keycloak:keycloak $JBOSS_HOME
+    && chown -R keycloak:keycloak $JBOSS_HOME \
+    && mkdir /docker-entrypoint.d  \
+    && mv $JBOSS_HOME/standalone/* /docker-entrypoint.d \
+    && mv $JBOSS_HOME/themes /docker-entrypoint.d
 
 COPY docker-entrypoint.sh setenv.sh /
-COPY configuration /docker-entrypoint.d/configuration
-COPY themes /docker-entrypoint.d/themes
+COPY --chown=keycloak:keycloak configuration /docker-entrypoint.d/configuration
+COPY --chown=keycloak:keycloak themes /docker-entrypoint.d/themes
 
 ENV LDAP_URL=ldap://ldap:389 \
     LDAP_BASE_DN=dc=dcm4che,dc=org \

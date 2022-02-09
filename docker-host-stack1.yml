@@ -48,7 +48,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /var/local/dcm4chee-arc/mysql:/var/lib/mysql
   keycloak:
-    image: dcm4che/keycloak:15.1.0
+    image: dcm4che/keycloak:16.1.1
     deploy:
       placement:
         constraints:

@@ -123,10 +123,6 @@ HTTP port of Wildfly Administration Console (optional, default is `9990`).
 
 HTTPS port of Wildfly Administration Console (optional, default is `9993`).
 
-#### `WILDFLY_ADMIN_USER`
-
-User to authenticate to the Wildfly Administration Console (optional, default is `admin`).
-
 #### `SUPER_USER_ROLE`
 
 User role to identify super users, which have unrestricted access to all UI functions of the Archive. Login/Logout of
@@ -291,6 +287,7 @@ Optional, default depends on external database:
 -- | --
 `postgres` | `jdbc:postgresql://db:5432/keycloak`
 `mysql` | `jdbc:mysql://db:3306/keycloak?characterEncoding=UTF-8`
+`mariadb` | `jdbc:mariadb://db:3306/keycloak?characterEncoding=UTF-8`
 `oracle` | `jdbc:oracle:thin:@db:1521:keycloak`
 
 #### `KEYCLOAK_DB_MAX_POOL_SIZE`
